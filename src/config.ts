@@ -16,7 +16,7 @@ export const Platforms = new Set([
   'atcoder', 'baekjoon', 'cms', 'codebreaker',
   'codechef', 'codedrills', 'codeforces', 'dmoj',
   'oj.uz', 'qoj.ac', 'szkopuł', 'usaco',
-  'eolymp'
+  'eolymp', 'kattis'
 ]);
 
 export const HostnameToPlatform: Record<string, string> = {
@@ -33,7 +33,8 @@ export const HostnameToPlatform: Record<string, string> = {
   'qoj.ac': 'qoj.ac',
   'szkopul.edu.pl': 'szkopuł',
   'usaco.org': 'usaco',
-  'eolymp.com': 'eolymp'
+  'eolymp.com': 'eolymp',
+  'open.kattis.com': 'kattis'
 }
 
 export const root = path.resolve(__dirname, '..');
