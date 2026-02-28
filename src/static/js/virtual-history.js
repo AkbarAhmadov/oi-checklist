@@ -124,7 +124,15 @@ function showEmptyState() {
   document.getElementById('total-time').textContent = '0h';
 }
 
+let allContests = []; // Store all contests for filtering
+
 function displayContests(contests, contestData, problemsData, contestScores) {
+  allContests = contests; // Store for filtering
+  
+  // Store data globally for filter access
+  window.contestDataGlobal = contestData;
+  window.problemsDataGlobal = problemsData;
+  
   const listContainer = document.getElementById('vc-history-list');
   listContainer.innerHTML = '';
 
@@ -139,13 +147,13 @@ function displayContests(contests, contestData, problemsData, contestScores) {
   document.getElementById('vc-history-empty').style.display = 'none';
   document.getElementById('stats-skeleton').style.display = 'none';
   document.getElementById('vc-history-stats').style.display = 'flex';
+  document.getElementById('vc-history-filters').style.display = 'flex';
+  
+  // Setup filters
+  setupFilters(contests, contestScores);
 }
 
 function createContestItem(contest, contestData, problemsData, contestScores) {
-  // console.log(contest);
-  // console.log(contestData);
-  // console.log('problemsData: ', problemsData);
-  // console.log(contestScores);
   const item = document.createElement('div');
   item.className = 'vc-history-item';
 
@@ -298,9 +306,7 @@ function createContestItem(contest, contestData, problemsData, contestScores) {
 }
 
 function updateStats(contests) {
-  if (contests.length === 0) return;
-
-  // Total contests
+  // Always update stats, even if contests array is empty
   document.getElementById('total-contests').textContent = contests.length;
 
   // Calculate total time
@@ -319,9 +325,391 @@ function updateStats(contests) {
   let totalTimeText;
   if (totalHours > 0) {
     totalTimeText = `${totalHours}h ${remainingMinutes}m`;
-  } else {
+  } else if (remainingMinutes > 0) {
     totalTimeText = `${remainingMinutes}m`;
+  } else {
+    totalTimeText = '0h';
   }
 
   document.getElementById('total-time').textContent = totalTimeText;
+}
+
+function setupFilters(contests, contestScores) {
+  // Setup search functionality
+  const searchInput = document.getElementById('contest-search');
+  const searchIconInput = document.getElementById('contest-search-icon');
+  
+  // Add event listeners to both search inputs
+  if (searchInput) {
+    searchInput.addEventListener('input', () => applyFilters(contestScores));
+  }
+  if (searchIconInput) {
+    searchIconInput.addEventListener('input', () => applyFilters(contestScores));
+  }
+  
+  // Setup search icon functionality
+  setupSearchIcon();
+
+  // Setup olympiad filters
+  const olympiadFilters = document.getElementById('olympiad-filters');
+  const olympiads = [...new Set(contests.map(c => c.contest.source.toUpperCase()))];
+  
+  olympiadFilters.innerHTML = '';
+  
+  // Add select all/deselect all controls for olympiads
+  const olympiadSelectAll = document.createElement('div');
+  olympiadSelectAll.className = 'filter-select-controls';
+  olympiadSelectAll.innerHTML = `
+    <button class="filter-select-btn" data-action="select-all" data-filter="olympiad">all</button>
+    <button class="filter-select-btn" data-action="select-none" data-filter="olympiad">none</button>
+  `;
+  olympiadFilters.appendChild(olympiadSelectAll);
+  
+  olympiads.forEach(olympiad => {
+    const label = document.createElement('label');
+    label.className = 'filter-checkbox-compact';
+    label.innerHTML = `
+      <input type="checkbox" value="${olympiad}" checked>
+      <span class="checkmark-compact"></span>
+      ${olympiad}
+    `;
+    olympiadFilters.appendChild(label);
+  });
+  
+  // Add select all/deselect all controls for medals
+  const medalFilters = document.getElementById('medal-filters');
+  const medalSelectAll = document.createElement('div');
+  medalSelectAll.className = 'filter-select-controls';
+  medalSelectAll.innerHTML = `
+    <button class="filter-select-btn" data-action="select-all" data-filter="medal">all</button>
+    <button class="filter-select-btn" data-action="select-none" data-filter="medal">none</button>
+  `;
+  medalFilters.insertBefore(medalSelectAll, medalFilters.firstChild);
+  
+  // Setup dropdown functionality for both dropdowns
+  setupDropdownFunctionality('olympiad-dropdown-button', 'olympiad-dropdown-menu');
+  setupDropdownFunctionality('medal-dropdown-button', 'medal-dropdown-menu');
+  
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    const olympiadButton = document.getElementById('olympiad-dropdown-button');
+    const olympiadMenu = document.getElementById('olympiad-dropdown-menu');
+    const medalButton = document.getElementById('medal-dropdown-button');
+    const medalMenu = document.getElementById('medal-dropdown-menu');
+    const searchDropdown = document.getElementById('search-dropdown');
+    
+    if (!olympiadButton.contains(e.target) && !olympiadMenu.contains(e.target)) {
+      closeDropdown('olympiad-dropdown-button', 'olympiad-dropdown-menu');
+    }
+    if (!medalButton.contains(e.target) && !medalMenu.contains(e.target)) {
+      closeDropdown('medal-dropdown-button', 'medal-dropdown-menu');
+    }
+    
+    // Close search dropdown if clicking outside
+    const searchIcon = document.getElementById('search-icon');
+    const searchIconMobile = document.getElementById('search-icon-mobile');
+    if (searchDropdown && !searchDropdown.contains(e.target) && 
+        !searchIcon?.contains(e.target) && !searchIconMobile?.contains(e.target)) {
+      searchDropdown.classList.remove('show');
+    }
+  });
+  
+  // Add event listeners to all filter checkboxes
+  const allCheckboxes = document.querySelectorAll('.filter-checkbox-compact input[type="checkbox"]');
+  allCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      updateFilterButtonTexts();
+      applyFilters(contestScores);
+    });
+  });
+  
+  // Add event listeners to select all/none buttons
+  const selectButtons = document.querySelectorAll('.filter-select-btn');
+  selectButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const action = button.dataset.action;
+      const filterType = button.dataset.filter;
+      
+      let checkboxes;
+      if (filterType === 'olympiad') {
+        checkboxes = document.querySelectorAll('#olympiad-filters input[type="checkbox"]');
+      } else {
+        checkboxes = document.querySelectorAll('#medal-filters input[type="checkbox"]');
+      }
+      
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = action === 'select-all';
+      });
+      
+      updateFilterButtonTexts();
+      applyFilters(contestScores);
+    });
+  });
+  
+  // Initialize filter button texts
+  updateFilterButtonTexts();
+}
+
+function setupDropdownFunctionality(buttonId, menuId) {
+  const dropdownButton = document.getElementById(buttonId);
+  const dropdownMenu = document.getElementById(menuId);
+  
+  dropdownButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = dropdownMenu.classList.contains('show');
+    
+    // Close other dropdown first
+    const otherButtonId = buttonId === 'olympiad-dropdown-button' ? 'medal-dropdown-button' : 'olympiad-dropdown-button';
+    const otherMenuId = menuId === 'olympiad-dropdown-menu' ? 'medal-dropdown-menu' : 'olympiad-dropdown-menu';
+    closeDropdown(otherButtonId, otherMenuId);
+    
+    if (isOpen) {
+      closeDropdown(buttonId, menuId);
+    } else {
+      openDropdown(buttonId, menuId);
+    }
+  });
+  
+  // Prevent dropdown from closing when clicking inside
+  dropdownMenu.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+}
+
+function openDropdown(buttonId, menuId) {
+  document.getElementById(menuId).classList.add('show');
+  document.getElementById(buttonId).classList.add('active');
+}
+
+function closeDropdown(buttonId, menuId) {
+  document.getElementById(menuId).classList.remove('show');
+  document.getElementById(buttonId).classList.remove('active');
+}
+
+function updateFilterButtonTexts() {
+  // Update olympiad filter button text
+  const olympiadCheckboxes = document.querySelectorAll('#olympiad-filters input[type="checkbox"]');
+  const selectedOlympiads = Array.from(olympiadCheckboxes).filter(cb => cb.checked);
+  const totalOlympiads = olympiadCheckboxes.length;
+  
+  let olympiadText;
+  if (selectedOlympiads.length === totalOlympiads) {
+    olympiadText = 'Olympiads'; // Keep original label when all selected
+  } else if (selectedOlympiads.length === 1) {
+    olympiadText = selectedOlympiads[0].value;
+  } else if (selectedOlympiads.length === 0) {
+    olympiadText = 'None';
+  } else {
+    // Multiple selected - show first one and indicate more
+    const firstSelected = selectedOlympiads[0].value;
+    olympiadText = `${firstSelected}+${selectedOlympiads.length - 1}`;
+  }
+  
+  document.querySelector('#olympiad-dropdown-button .filter-text').textContent = olympiadText;
+  
+  // Update medal filter button text
+  const medalCheckboxes = document.querySelectorAll('#medal-filters input[type="checkbox"]');
+  const selectedMedals = Array.from(medalCheckboxes).filter(cb => cb.checked);
+  const totalMedals = medalCheckboxes.length;
+  
+  let medalText;
+  if (selectedMedals.length === totalMedals) {
+    medalText = 'Medals'; // Keep original label when all selected
+  } else if (selectedMedals.length === 1) {
+    const medalValue = selectedMedals[0].value;
+    medalText = medalValue.charAt(0).toUpperCase() + medalValue.slice(1);
+  } else if (selectedMedals.length === 0) {
+    medalText = 'None';
+  } else {
+    // Multiple selected - show first one and indicate more
+    const firstSelected = selectedMedals[0].value;
+    const firstCapitalized = firstSelected.charAt(0).toUpperCase() + firstSelected.slice(1);
+    medalText = `${firstCapitalized}+${selectedMedals.length - 1}`;
+  }
+  
+  document.querySelector('#medal-dropdown-button .filter-text').textContent = medalText;
+}
+
+function setupSearchIcon() {
+  const searchIcon = document.getElementById('search-icon');
+  const searchIconMobile = document.getElementById('search-icon-mobile');
+  const searchDropdown = document.getElementById('search-dropdown');
+  
+  // Handle search icon clicks
+  [searchIcon, searchIconMobile].forEach(icon => {
+    if (icon) {
+      icon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = searchDropdown.classList.contains('show');
+        
+        if (isOpen) {
+          // Close with drop-up animation
+          searchDropdown.classList.remove('show');
+        } else {
+          // Position dropdown relative to the clicked icon
+          if (icon === searchIconMobile) {
+            // For mobile, use fixed positioning
+            const iconRect = icon.getBoundingClientRect();
+            searchDropdown.classList.add('mobile');
+            searchDropdown.style.position = 'fixed';
+            searchDropdown.style.top = `${iconRect.bottom + 8}px`;
+            searchDropdown.style.left = `${iconRect.left}px`;
+            searchDropdown.style.right = 'auto';
+            searchDropdown.style.width = '200px';
+          } else {
+            // For medium screens, use default positioning
+            searchDropdown.classList.remove('mobile');
+            searchDropdown.style.position = 'absolute';
+            searchDropdown.style.top = '100%';
+            searchDropdown.style.right = '0';
+            searchDropdown.style.left = 'auto';
+            searchDropdown.style.width = '250px';
+          }
+          
+          // Open with drop-down animation
+          searchDropdown.classList.add('show');
+          // Focus the input after animation
+          const input = searchDropdown.querySelector('input');
+          if (input) {
+            setTimeout(() => input.focus(), 300);
+          }
+        }
+      });
+    }
+  });
+}
+
+function applyFilters(contestScores) {
+  // Get search term from the appropriate input
+  let searchTerm = '';
+  const mainSearchInput = document.getElementById('contest-search');
+  const iconSearchInput = document.getElementById('contest-search-icon');
+  
+  if (mainSearchInput && mainSearchInput.offsetParent !== null) {
+    // Main search input is visible
+    searchTerm = mainSearchInput.value.toLowerCase().trim();
+  } else if (iconSearchInput) {
+    // Icon search input
+    searchTerm = iconSearchInput.value.toLowerCase().trim();
+  }
+  
+  // Get selected olympiads
+  const selectedOlympiads = Array.from(document.querySelectorAll('#olympiad-filters input:checked'))
+    .map(cb => cb.value);
+  
+  // Get selected medals
+  const selectedMedals = Array.from(document.querySelectorAll('#medal-filters input:checked'))
+    .map(cb => cb.value);
+  
+  // Filter contests
+  const filteredContests = allContests.filter(contest => {
+    // Check search filter - now includes problem name search
+    let searchMatch = !searchTerm;
+    
+    if (searchTerm) {
+      // Search in contest metadata
+      const contestMatch = contest.contest.source.toLowerCase().includes(searchTerm) ||
+        contest.contest.year.toString().includes(searchTerm) ||
+        (contest.contestStage && contest.contestStage.toLowerCase().includes(searchTerm)) ||
+        (contest.contest.location && contest.contest.location.toLowerCase().includes(searchTerm));
+      
+      // Search in problem names
+      let problemMatch = false;
+      if (window.problemsDataGlobal && contest.contest && contest.contest.problems) {
+        const contestProblemsData = window.problemsDataGlobal[contest.contest.source.toUpperCase()];
+        if (contestProblemsData && contestProblemsData[contest.contest.year]) {
+          const yearProblems = contestProblemsData[contest.contest.year];
+          
+          // Check all problems in this contest
+          for (let problem of contest.contest.problems) {
+            const problemData = yearProblems.find(p => p.id == problem.problemId);
+            if (problemData && problemData.name.toLowerCase().includes(searchTerm)) {
+              problemMatch = true;
+              break;
+            }
+          }
+        }
+      }
+      
+      searchMatch = contestMatch || problemMatch;
+    }
+    
+    // Check olympiad filter
+    const olympiadMatch = selectedOlympiads.includes(contest.contest.source.toUpperCase());
+    
+    // Check medal filter
+    const medalType = getMedalType(contest, contestScores);
+    const medalMatch = selectedMedals.includes(medalType);
+    
+    return searchMatch && olympiadMatch && medalMatch;
+  });
+  
+  // Update display
+  const listContainer = document.getElementById('vc-history-list');
+  listContainer.innerHTML = '';
+  
+  if (filteredContests.length === 0) {
+    showFilteredEmptyState();
+  } else {
+    // Store global references to pass correct data
+    let contestData = {};
+    let problemsData = {};
+    
+    // Get the data from global scope if available, otherwise use stored allContests data
+    if (typeof window.contestDataGlobal !== 'undefined') {
+      contestData = window.contestDataGlobal;
+      problemsData = window.problemsDataGlobal;
+    }
+    
+    filteredContests.forEach(contest => {
+      const item = createContestItem(contest, contestData, problemsData, contestScores);
+      listContainer.appendChild(item);
+    });
+    document.getElementById('vc-history-empty').style.display = 'none';
+    document.getElementById('vc-history-list').style.display = 'flex';
+  }
+  
+  // Update stats for filtered contests
+  updateStats(filteredContests);
+}
+
+function getMedalType(contest, contestScores) {
+  const scoreData = contestScores[contest.contestId];
+  
+  if (scoreData && Array.isArray(scoreData.medalCutoffs) && scoreData.medalCutoffs.length > 0) {
+    const totalScore = contest.score;
+    const cutoffs = scoreData.medalCutoffs;
+    const labels = scoreData.medalNames;
+
+    const labelAt = (idx, fallback) => (labels[idx] ? String(labels[idx]).toLowerCase() : fallback);
+
+    if (cutoffs.length >= 3) {
+      const [goldCutoff, silverCutoff, bronzeCutoff] = cutoffs;
+      if (totalScore >= goldCutoff) return 'gold';
+      if (totalScore >= silverCutoff) return 'silver';
+      if (totalScore >= bronzeCutoff) return 'bronze';
+    } else if (cutoffs.length === 2) {
+      const firstLabel = labelAt(0, 'gold');
+      if (totalScore >= cutoffs[0]) return firstLabel;
+      if (totalScore >= cutoffs[1]) return 'other'; // Always return 'other' for second tier
+    } else if (cutoffs.length === 1) {
+      const onlyLabel = labelAt(0, 'gold');
+      if (totalScore >= cutoffs[0]) return onlyLabel;
+    }
+  }
+  
+  return 'other'; // Changed from 'none' to 'other'
+}
+
+function showFilteredEmptyState() {
+  const emptyDiv = document.getElementById('vc-history-empty');
+  emptyDiv.innerHTML = `
+    <div class="empty-text">No contests match the current filters</div>
+    <div class="empty-subtext">Try adjusting your filter selections to see more results.</div>
+  `;
+  emptyDiv.style.display = 'block';
+  document.getElementById('vc-history-list').style.display = 'none';
 }

@@ -50,16 +50,84 @@
                 </div>
             </div>
             
-            <!-- Actual stats -->
             <div class="vc-history-stats" id="vc-history-stats" style="display: none;">
-                <div class="stat-item">
-                    <span class="stat-number" id="total-contests">0</span>
-                    <span class="stat-label">contests completed</span>
+                <div class="stats-content">
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-contests">0</span>
+                        <span class="stat-label">contests completed</span>
+                    </div>
+                    <div class="stat-divider">|</div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="total-time">0h</span>
+                        <span class="stat-label">total time spent</span>
+                    </div>
                 </div>
-                <div class="stat-divider">|</div>
-                <div class="stat-item">
-                    <span class="stat-number" id="total-time">0h</span>
-                    <span class="stat-label">total time spent</span>
+                <div class="stats-search">
+                    <input type="text" id="contest-search" class="search-input" placeholder="Search contests...">
+                </div>
+                <div class="search-icon" id="search-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-5-5"></path>
+                    </svg>
+                </div>
+                <div class="search-dropdown" id="search-dropdown">
+                    <input type="text" id="contest-search-icon" class="search-input" placeholder="Search contests...">
+                </div>
+            </div>
+            
+            <div class="vc-history-filters" id="vc-history-filters" style="display: none;">
+                <div class="filter-label">FILTER:</div>
+                <div class="filter-dropdowns">
+                    <div class="search-icon-mobile" id="search-icon-mobile">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-5-5"></path>
+                        </svg>
+                    </div>
+                    
+                    <div class="filter-dropdown-container">
+                        <button class="filter-dropdown-button" id="olympiad-dropdown-button">
+                            <span class="filter-text">Olympiads</span>
+                            <span class="filter-arrow">▼</span>
+                        </button>
+                        <div class="filter-dropdown-menu" id="olympiad-dropdown-menu">
+                            <div class="filter-options-compact" id="olympiad-filters">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-dropdown-container">
+                        <button class="filter-dropdown-button" id="medal-dropdown-button">
+                            <span class="filter-text">Medals</span>
+                            <span class="filter-arrow">▼</span>
+                        </button>
+                        <div class="filter-dropdown-menu" id="medal-dropdown-menu">
+                            <div class="filter-options-compact" id="medal-filters">
+                                <label class="filter-checkbox-compact">
+                                    <input type="checkbox" value="gold" checked>
+                                    <span class="checkmark-compact"></span>
+                                    <span class="medal-badge gold">Gold</span>
+                                </label>
+                                <label class="filter-checkbox-compact">
+                                    <input type="checkbox" value="silver" checked>
+                                    <span class="checkmark-compact"></span>
+                                    <span class="medal-badge silver">Silver</span>
+                                </label>
+                                <label class="filter-checkbox-compact">
+                                    <input type="checkbox" value="bronze" checked>
+                                    <span class="checkmark-compact"></span>
+                                    <span class="medal-badge bronze">Bronze</span>
+                                </label>
+                                <label class="filter-checkbox-compact">
+                                    <input type="checkbox" value="other" checked>
+                                    <span class="checkmark-compact"></span>
+                                    <span class="medal-badge other">Other</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
