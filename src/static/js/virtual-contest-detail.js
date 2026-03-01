@@ -487,10 +487,12 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
           <div class="vc-detail-meta-label">Time Used</div>
           <div class="vc-detail-meta-value">${timeUsed}</div>
         </div>
+        ${!contest.contest.source.toUpperCase().includes('USACO') ? `
         <div class="vc-detail-meta-item">
           <div class="vc-detail-meta-label">Medal</div>
           <div class="vc-detail-meta-value">${medalText}</div>
         </div>
+        ` : ''}
         <div class="vc-detail-meta-item">
           <div class="vc-detail-meta-label">Percentile</div>
           <div class="vc-detail-meta-value">${participantPercentile !== null ? formatOrdinal(participantPercentile) : '-'}</div>
