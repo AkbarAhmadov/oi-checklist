@@ -1,4 +1,21 @@
 // Virtual Contest History JavaScript
+
+// Helper function to format contest source for display (specifically for USACO)
+function formatContestSourceDisplay(contestSource) {
+  const upperSource = contestSource.toUpperCase();
+  
+  // Check if it's a USACO division
+  if (['USACOSILVER', 'USACOBRONZE', 'USACOPLATINUM', 'USACOGOLD'].includes(upperSource)) {
+    // Convert USACOSILVER to USACO Silver, etc.
+    const division = upperSource.replace('USACO', '');
+    const capitalizedDivision = division.charAt(0).toUpperCase() + division.slice(1).toLowerCase();
+    return `USACO ${capitalizedDivision}`;
+  }
+  
+  // For non-USACO contests, return as uppercase
+  return upperSource;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const sessionToken = localStorage.getItem('sessionToken');
 
@@ -260,7 +277,7 @@ function createContestItem(contest, contestData, problemsData, contestScores) {
   item.innerHTML = `
     <div class="vc-history-item-header">
       <div>
-        <div class="vc-history-title">${contest.contest.source.toUpperCase()} ${contest.contest.year}${contest.contestStage ? ` ${contest.contestStage}` : ''}</div>
+        <div class="vc-history-title">${formatContestSourceDisplay(contest.contest.source)} ${contest.contest.year}${contest.contestStage ? ` ${contest.contestStage}` : ''}</div>
         <div class="vc-history-date">${formattedDate} | ${problemCount} problems</div>
         <div class="vc-history-metadata">${contestLocation || contestWebsite ? `${contestLocation}${contestLocation && contestWebsite ? ' | ' : ''}${contestWebsite ? `<a href="${contestWebsite}" target="_blank">${contestWebsite}</a>` : ''}` : ''}</div>
       </div>
@@ -297,7 +314,7 @@ function createContestItem(contest, contestData, problemsData, contestScores) {
     if (e.target.tagName === 'A' || e.target.closest('a')) {
       return;
     }
-    // Use query parameters with clean slug
+    // Use query parameters with clean slug (backend expects format: namepart + year + stage)
     const slug = (contest.contestName + (contest.contestStage || '')).toLowerCase().replace(/\s+/g, '');
     window.location.href = `virtual-contest-detail?contest=${slug}`;
   });
@@ -352,7 +369,17 @@ function setupFilters(contests, contestScores) {
 
   // Setup olympiad filters
   const olympiadFilters = document.getElementById('olympiad-filters');
-  const olympiads = [...new Set(contests.map(c => c.contest.source.toUpperCase()))];
+  const allOlympiads = [...new Set(contests.map(c => c.contest.source.toUpperCase()))];
+  
+  // Group USACO olympiads under one "USACO" option
+  const usacoOlympiads = allOlympiads.filter(o => o.startsWith('USACO'));
+  const nonUsacoOlympiads = allOlympiads.filter(o => !o.startsWith('USACO'));
+  
+  let olympiads = [...nonUsacoOlympiads];
+  if (usacoOlympiads.length > 0) {
+    olympiads.push('USACO');
+  }
+  olympiads.sort();
   
   olympiadFilters.innerHTML = '';
   
@@ -368,8 +395,13 @@ function setupFilters(contests, contestScores) {
   olympiads.forEach(olympiad => {
     const label = document.createElement('label');
     label.className = 'filter-checkbox-compact';
+    let value = olympiad;
+    if (olympiad === 'USACO') {
+      // Store all USACO variations for filtering
+      value = usacoOlympiads.join(',');
+    }
     label.innerHTML = `
-      <input type="checkbox" value="${olympiad}" checked>
+      <input type="checkbox" value="${value}" checked data-display="${olympiad}">
       <span class="checkmark-compact"></span>
       ${olympiad}
     `;
@@ -499,12 +531,12 @@ function updateFilterButtonTexts() {
   if (selectedOlympiads.length === totalOlympiads) {
     olympiadText = 'Olympiads'; // Keep original label when all selected
   } else if (selectedOlympiads.length === 1) {
-    olympiadText = selectedOlympiads[0].value;
+    olympiadText = selectedOlympiads[0].dataset.display || selectedOlympiads[0].value;
   } else if (selectedOlympiads.length === 0) {
     olympiadText = 'None';
   } else {
     // Multiple selected - show first one and indicate more
-    const firstSelected = selectedOlympiads[0].value;
+    const firstSelected = selectedOlympiads[0].dataset.display || selectedOlympiads[0].value;
     olympiadText = `${firstSelected}+${selectedOlympiads.length - 1}`;
   }
   
@@ -638,7 +670,26 @@ function applyFilters(contestScores) {
     }
     
     // Check olympiad filter
-    const olympiadMatch = selectedOlympiads.includes(contest.contest.source.toUpperCase());
+    const selectedOlympiads = Array.from(document.querySelectorAll('#olympiad-filters input:checked'))
+      .map(cb => cb.value);
+    
+    let olympiadMatch = false;
+    for (const selected of selectedOlympiads) {
+      if (selected.includes(',')) {
+        // This is a grouped option (like USACO) - check if contest matches any of the values
+        const groupValues = selected.split(',');
+        if (groupValues.includes(contest.contest.source.toUpperCase())) {
+          olympiadMatch = true;
+          break;
+        }
+      } else {
+        // Regular single olympiad check
+        if (selected === contest.contest.source.toUpperCase()) {
+          olympiadMatch = true;
+          break;
+        }
+      }
+    }
     
     // Check medal filter
     const medalType = getMedalType(contest, contestScores);

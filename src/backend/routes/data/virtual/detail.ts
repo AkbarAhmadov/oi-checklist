@@ -31,7 +31,12 @@ export async function detail(app: FastifyInstance) {
         throw createError.BadRequest('Invalid slug format');
       }
       const [, namePart, yearPart, stagePart] = match;
-      const name = `${namePart.toUpperCase()} ${yearPart}`;
+      let name = `${namePart.toUpperCase()} ${yearPart}`;
+      if (namePart.startsWith("usaco")) { // We need to special case USACO
+        let division = namePart.slice(5);
+        division = division[0].toUpperCase() + division.slice(1);
+        name = `USACO ${division} ${yearPart}`;
+      }
       const stage = stagePart
         ?.replace(/^day(\d+)$/i, 'Day $1')
         .replace(/^./, c => c.toUpperCase()) ?? '';

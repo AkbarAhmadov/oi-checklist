@@ -87,6 +87,22 @@ function convertData(newData) {
   return result;
 }
 
+// Helper function to format contest source for display (specifically for USACO)
+function formatContestSourceDisplay(contestSource) {
+  const upperSource = contestSource.toUpperCase();
+  
+  // Check if it's a USACO division
+  if (['USACOSILVER', 'USACOBRONZE', 'USACOPLATINUM', 'USACOGOLD'].includes(upperSource)) {
+    // Convert USACOSILVER to USACO Silver, etc.
+    const division = upperSource.replace('USACO', '');
+    const capitalizedDivision = division.charAt(0).toUpperCase() + division.slice(1).toLowerCase();
+    return `USACO ${capitalizedDivision}`;
+  }
+  
+  // For non-USACO contests, return as uppercase
+  return upperSource;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   // --- Platform sync preview state holders ---
   let lastRenderedContest = null;
@@ -96,6 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.isVirtualContestMode = true;
 
   const olympiadSelect = document.getElementById('olympiad-select');
+  const divisionSelect = document.getElementById('division-select');
   const contestSelect = document.getElementById('contest-select');
   const daySelect = document.getElementById('day-select');
   const contestDetails = document.getElementById('contest-details');
@@ -449,10 +466,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Find the problem in problemsData
         const olympiadProblems = problemsData[prob.source];
         if (olympiadProblems && olympiadProblems[prob.year]) {
-          const problem = olympiadProblems[prob.year].find(p =>
-            p.year === prob.year &&
-            p.number === prob.number
-          );
+          // For USACO contests, also match by extra field (stage), for others just match by year and number
+          const problem = olympiadProblems[prob.year].find(p => {
+            const basicMatch = p.year === prob.year && p.number === prob.number;
+            // Only apply extra matching for USACO contests that have stages like "Open", "February", etc.
+            if (prob.source.toLowerCase().includes('usaco') && contestStage && p.extra) {
+              return basicMatch && p.extra === contestStage;
+            }
+            return basicMatch;
+          });
           if (problem) {
             problemData.push({
               id: problem.id,
@@ -466,7 +488,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
           } else {
             problemData.push({
-              id: problem.id,
+              id: `unknown_${index}`,
               name: `Problem ${index + 1}`,
               link: '#',
               source: prob.source,
@@ -587,8 +609,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Reset form
     olympiadSelect.value = '';
+    divisionSelect.innerHTML = '<option value="">Select Division</option>';
     contestSelect.innerHTML = '<option value="">Select Contest</option>';
     daySelect.innerHTML = '<option value="">Select Day</option>';
+    divisionSelect.disabled = true;
     contestSelect.disabled = true;
     daySelect.disabled = true;
     contestDetails.style.display = 'none';
@@ -703,10 +727,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     vcForm.style.display = 'block';
 
     olympiadSelect.innerHTML = '<option value="">Select Olympiad</option>';
+    const usacoDivisions = [];
+    const otherOlympiads = [];
+    
     Object.keys(contestData).forEach(source => {
+      if (['USACOSILVER', 'USACOBRONZE', 'USACOPLATINUM', 'USACOGOLD'].includes(source)) {
+        usacoDivisions.push(source);
+      } else {
+        otherOlympiads.push(source);
+      }
+    });
+    
+    // Create array of all olympiad options
+    const allOptions = [];
+    
+    // Add USA Computing Olympiad if there are USACO divisions
+    if (usacoDivisions.length > 0) {
+      allOptions.push({
+        value: 'USACO_COMBINED',
+        text: 'USA Computing Olympiad'
+      });
+    }
+    
+    // Add other olympiads
+    otherOlympiads.forEach(source => {
+      allOptions.push({
+        value: source,
+        text: getFullOlympiadName(source)
+      });
+    });
+    
+    // Sort alphabetically by display text
+    allOptions.sort((a, b) => a.text.localeCompare(b.text));
+    
+    // Add sorted options to dropdown
+    allOptions.forEach(opt => {
       const option = document.createElement('option');
-      option.value = source;
-      option.textContent = getFullOlympiadName(source);
+      option.value = opt.value;
+      option.textContent = opt.text;
       olympiadSelect.appendChild(option);
     });
   }
@@ -741,7 +799,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         day: 'numeric'
       });
       item.innerHTML = `
-              <div class="past-vc-title">${contest.contest_source.toUpperCase()} ${contest.contest_year}${contest.contest_stage ? ` ${contest.contest_stage}` : ''}</div>
+              <div class="past-vc-title">${formatContestSourceDisplay(contest.contest_source)} ${contest.contest_year}${contest.contest_stage ? ` ${contest.contest_stage}` : ''}</div>
               <div class="past-vc-score">${contest.score}/${numProblems * 100}</div>
               <div class="past-vc-date">${formattedDate}</div>
           `;
@@ -749,6 +807,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (e.target.tagName === 'A' || e.target.closest('a')) {
           return;
         }
+        // Generate slug based on contest name and stage (backend expects format: namepart + year + stage)
         const slug = (contest.contest_name + (contest.contest_stage || '')).toLowerCase().replace(/\s+/g, '');
         window.location.href = `virtual-contest-detail?contest=${slug}`;
       });
@@ -955,12 +1014,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Handle olympiad selection
   olympiadSelect.addEventListener('change', (e) => {
     const selectedOlympiad = e.target.value;
+    const divisionRow = document.getElementById('division-row');
     const contestRow = document.getElementById('contest-row');
     const dayRow = document.getElementById('day-row');
+    const contestSelectLabel = document.getElementById('contest-select-label');
 
+    divisionSelect.innerHTML = '<option value="">Select Division</option>';
     contestSelect.innerHTML = '<option value="">Select Contest</option>';
     daySelect.innerHTML = '<option value="">Select Day</option>';
-    contestSelect.disabled = !selectedOlympiad;
+    divisionSelect.disabled = true;
+    contestSelect.disabled = true;
     daySelect.disabled = true;
     contestDetails.style.display = 'none';
     ojuzSection.style.display = 'none';
@@ -971,14 +1034,88 @@ document.addEventListener('DOMContentLoaded', async () => {
     const completionWarning = document.getElementById('completion-warning');
     completionWarning.style.display = 'none';
 
-    // Show/hide entire form rows
-    contestRow.style.display = selectedOlympiad ? 'block' : 'none';
+    // Handle USACO combined case
+    if (selectedOlympiad === 'USACO_COMBINED') {
+      // Show division selection for USACO
+      divisionRow.style.display = 'block';
+      contestRow.style.display = 'none';
+      dayRow.style.display = 'none';
+      contestSelectLabel.textContent = 'Year';
+
+      // Populate divisions based on available USACO data
+      const usacoDivisions = ['USACOBRONZE', 'USACOSILVER', 'USACOGOLD', 'USACOPLATINUM'];
+      const availableDivisions = [];
+      
+      usacoDivisions.forEach(division => {
+        if (contestData[division]) {
+          availableDivisions.push(division);
+        }
+      });
+
+      availableDivisions.forEach(division => {
+        const option = document.createElement('option');
+        option.value = division;
+        // Get full name and remove "USACO " prefix for display
+        const fullName = getFullOlympiadName(division);
+        const displayName = fullName.startsWith('USACO ') ? fullName.substring(6) : fullName;
+        option.textContent = displayName;
+        divisionSelect.appendChild(option);
+      });
+
+      divisionSelect.disabled = false;
+    } else {
+      // Regular olympiad handling
+      divisionRow.style.display = 'none';
+      contestRow.style.display = selectedOlympiad ? 'block' : 'none';
+      dayRow.style.display = 'none';
+      contestSelectLabel.textContent = 'Contest';
+
+      if (selectedOlympiad && contestData[selectedOlympiad]) {
+        Object.keys(contestData[selectedOlympiad]).forEach(year => {
+          const contests = contestData[selectedOlympiad][year];
+          // Group contests by name and show location
+          const contestMap = {};
+          contests.forEach(contest => {
+            if (!contestMap[contest.name]) {
+              contestMap[contest.name] = contest;
+            }
+          });
+
+          Object.values(contestMap).forEach(contest => {
+            const option = document.createElement('option');
+            option.value = `${contest.name}|${year}`;
+            option.textContent = contest.name;
+            contestSelect.appendChild(option);
+          });
+        });
+        contestSelect.disabled = false;
+      }
+    }
+  });
+
+  // Handle division selection (for USACO)
+  divisionSelect.addEventListener('change', (e) => {
+    const selectedDivision = e.target.value;
+    const contestRow = document.getElementById('contest-row');
+    const dayRow = document.getElementById('day-row');
+
+    contestSelect.innerHTML = '<option value="">Select Year</option>';
+    daySelect.innerHTML = '<option value="">Select Day</option>';
+    contestSelect.disabled = true;
+    daySelect.disabled = true;
+    contestDetails.style.display = 'none';
+    ojuzSection.style.display = 'none';
+    startBtn.disabled = true;
+    document.getElementById('platform-sync-card').style.display = 'none';
+
+    // Show/hide form rows
+    contestRow.style.display = selectedDivision ? 'block' : 'none';
     dayRow.style.display = 'none';
 
-    if (selectedOlympiad && contestData[selectedOlympiad]) {
-      Object.keys(contestData[selectedOlympiad]).forEach(year => {
-        const contests = contestData[selectedOlympiad][year];
-        // Group contests by name and show location
+    if (selectedDivision && contestData[selectedDivision]) {
+      Object.keys(contestData[selectedDivision]).forEach(year => {
+        const contests = contestData[selectedDivision][year];
+        // Group contests by name
         const contestMap = {};
         contests.forEach(contest => {
           if (!contestMap[contest.name]) {
@@ -989,7 +1126,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         Object.values(contestMap).forEach(contest => {
           const option = document.createElement('option');
           option.value = `${contest.name}|${year}`;
-          option.textContent = contest.name;
+          // Remove USACO and division prefix from display name
+          let displayName = contest.name;
+          if (displayName.startsWith('USACO ')) {
+            displayName = displayName.substring(6); // Remove "USACO "
+            
+            // Get division name from selectedDivision and remove it too
+            const divisionName = getFullOlympiadName(selectedDivision).replace('USACO ', ''); // e.g., "Silver"
+            if (displayName.startsWith(divisionName + ' ')) {
+              displayName = displayName.substring(divisionName.length + 1); // Remove "Silver "
+            }
+          }
+          option.textContent = displayName;
           contestSelect.appendChild(option);
         });
       });
@@ -1001,6 +1149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   contestSelect.addEventListener('change', (e) => {
     const selectedContest = e.target.value;
     const selectedOlympiad = olympiadSelect.value;
+    const selectedDivision = divisionSelect.value;
     const dayRow = document.getElementById('day-row');
     const dayLabel = dayRow.querySelector('label');
 
@@ -1018,9 +1167,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Hide day row initially
     dayRow.style.display = 'none';
 
-    if (selectedContest && contestData[selectedOlympiad]) {
+    // Determine the actual data source (regular olympiad or USACO division)
+    const dataSource = selectedOlympiad === 'USACO_COMBINED' ? selectedDivision : selectedOlympiad;
+
+    if (selectedContest && contestData[dataSource]) {
       const [contestName, year] = selectedContest.split('|');
-      const contests = contestData[selectedOlympiad][year] || [];
+      const contests = contestData[dataSource][year] || [];
       const matchingContests = contests.filter(c => c.name === contestName);
 
       // Get unique stages and filter out null/undefined stages
@@ -1040,10 +1192,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Get platforms from the problems data we already fetched
         let platforms = ['Unknown'];
-        if (contest.problems && problemsData[selectedOlympiad]) {
+        if (contest.problems && problemsData[dataSource]) {
           const platformSet = new Set();
           contest.problems.forEach(prob => {
-            const yearProblems = problemsData[selectedOlympiad][prob.year] || [];
+            const yearProblems = problemsData[dataSource][prob.year] || [];
             const problem = yearProblems.find(p => p.year === prob.year && p.number === prob.number);
             if (problem) {
               if (problem.links && typeof problem.links === 'object') {
@@ -1067,7 +1219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Set state for platform sync preview and update
         lastRenderedContest = contest;
-        lastRenderedOlympiad = selectedOlympiad;
+        lastRenderedOlympiad = dataSource;
         lastProblemCount = problemCount;
         updatePlatformSyncPreview();
 
@@ -1084,7 +1236,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // If auto-track is enabled and not completed, pre-check coverage and disable start if missing
-        precheckCoverageAfterSelection(contest, selectedOlympiad);
+        precheckCoverageAfterSelection(contest, dataSource);
 
         // Show/hide ojuzSection if at least one platform is in auto_synced_platforms
         const hasAutoSynced = platforms && platforms.some(p => auto_synced_platforms.includes(p));
@@ -1126,11 +1278,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('platform-sync-card').style.display = 'none';
     const selectedStage = e.target.value;
     const selectedOlympiad = olympiadSelect.value;
+    const selectedDivision = divisionSelect.value;
     const selectedContest = contestSelect.value;
 
-    if (selectedStage && selectedContest && contestData[selectedOlympiad]) {
+    // Determine the actual data source (regular olympiad or USACO division)
+    const dataSource = selectedOlympiad === 'USACO_COMBINED' ? selectedDivision : selectedOlympiad;
+
+    if (selectedStage && selectedContest && contestData[dataSource]) {
       const [contestName, year] = selectedContest.split('|');
-      const contests = contestData[selectedOlympiad][year] || [];
+      const contests = contestData[dataSource][year] || [];
       const contest = contests.find(c => c.name === contestName && c.stage === selectedStage);
 
       if (!contest) return;
@@ -1144,10 +1300,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Get platforms from the problems data we already fetched
       let platforms = ['Unknown'];
-      if (contest.problems && problemsData[selectedOlympiad]) {
+      if (contest.problems && problemsData[dataSource]) {
         const platformSet = new Set();
         contest.problems.forEach(prob => {
-          const yearProblems = problemsData[selectedOlympiad][prob.year] || [];
+          const yearProblems = problemsData[dataSource][prob.year] || [];
           const problem = yearProblems.find(p => p.year === prob.year && p.number === prob.number);
           if (problem) {
             if (problem.links && typeof problem.links === 'object') {
@@ -1171,7 +1327,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Set state for platform sync preview and update
       lastRenderedContest = contest;
-      lastRenderedOlympiad = selectedOlympiad;
+      lastRenderedOlympiad = dataSource;
       lastProblemCount = problemCount;
       updatePlatformSyncPreview();
 
@@ -1188,7 +1344,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       // If auto-track is enabled and not completed, pre-check coverage and disable start if missing
-      precheckCoverageAfterSelection(contest, selectedOlympiad);
+      precheckCoverageAfterSelection(contest, dataSource);
 
       // Show/hide ojuzSection if at least one platform is in auto_synced_platforms
       const hasAutoSynced = platforms && platforms.some(p => auto_synced_platforms.includes(p));
@@ -1208,11 +1364,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const selectedOlympiad = olympiadSelect.value;
+    const selectedDivision = divisionSelect.value;
     const selectedContest = contestSelect.value;
     const selectedStage = daySelect.value;
 
+    // Determine the actual data source (regular olympiad or USACO division)
+    const dataSource = selectedOlympiad === 'USACO_COMBINED' ? selectedDivision : selectedOlympiad;
+
     const [contestName, year] = selectedContest.split('|');
-    const contests = contestData[selectedOlympiad][year] || [];
+    const contests = contestData[dataSource][year] || [];
 
     // Handle both cases: with stage selection and without
     let contest;
@@ -1272,9 +1432,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Now verify that every problem has at least one platform with a username
       let missingCoverage = false;
-      if (contest.problems && problemsData[selectedOlympiad]) {
+      if (contest.problems && problemsData[dataSource]) {
         for (const prob of contest.problems) {
-          const yearProblems = problemsData[selectedOlympiad][prob.year] || [];
+          const yearProblems = problemsData[dataSource][prob.year] || [];
           const problem = yearProblems.find(p => p.year === prob.year && p.number === prob.number);
           if (problem) {
             // Collect platforms available for this problem
@@ -1490,15 +1650,19 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // For contest selection (not active), use the old logic
     const selectedOlympiad = olympiadSelect.value;
+    const selectedDivision = divisionSelect.value;
     const selectedContest = contestSelect.value;
 
-    if (!selectedOlympiad || !selectedContest || !contestData[selectedOlympiad]) {
+    // Determine the actual data source (regular olympiad or USACO division)
+    const dataSource = selectedOlympiad === 'USACO_COMBINED' ? selectedDivision : selectedOlympiad;
+
+    if (!selectedOlympiad || !selectedContest || !contestData[dataSource]) {
       showMessage('No contest selected.', 'warning');
       return;
     }
 
     const [contestName, year] = selectedContest.split('|');
-    const contests = contestData[selectedOlympiad][year] || [];
+    const contests = contestData[dataSource][year] || [];
 
     // Handle both cases: with stage selection and without
     let contest;

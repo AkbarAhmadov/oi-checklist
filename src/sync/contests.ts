@@ -22,6 +22,7 @@ interface ContestYAML {
   isPrivate?: boolean;
   userContext?: string;
   contextData?: any;
+  promotionCutoff?: number;
   medalCutoffs?: Record<string, number>;
   problems: {
     source: string;
@@ -133,14 +134,14 @@ async function main() {
     const ans = await rl.question('Type "yes" to delete them: ');
     rl.close();
     if (ans == 'yes') {
-      await db.problem.deleteMany({
+      await db.contest.deleteMany({
         where: {
           OR: missing.map(i => {
             return i.stage ? { name: i.name, stage: i.stage } : { name: i.name }
           })
         }
       });
-      console.log(`Deleted ${missing.length} problems`);
+      console.log(`Deleted ${missing.length} contests`);
     }
   }
 
@@ -223,8 +224,16 @@ async function main() {
       medalCutoffs: number[];
       problemScores: Record<string, number[]>;
       isPrivate: boolean;
+      promotionCutoff?: number;
     };
-    let data: ContestScoreData = { contestId: contest.id, medalNames: [], medalCutoffs: [], problemScores: i.scores, isPrivate: i.isPrivate };
+    let data: ContestScoreData = {
+      contestId: contest.id,
+      medalNames: [],
+      medalCutoffs: [],
+      problemScores: i.scores,
+      isPrivate: i.isPrivate,
+      ...(i.promotionCutoff ? { promotionCutoff: i.promotionCutoff } : {})
+    };
     if (!i.medalCutoffs) {
       console.warn(`[warn] contest ${i.name} ${i.stage ? i.stage : ''} does not have medalCutoffs`);
     } else {

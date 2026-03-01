@@ -36,6 +36,9 @@ export async function stats(app: FastifyInstance) {
     }
     // rank per problem = #people that did better than us + 1
     const scores = contest.contest.scores.problemScores as Record<string, number[]>;
+    if (!scores) {
+      return {};
+    }
     const userScores = contest.perProblemScores as number[];
     let ranks = contest.contest.problems.map(p => {
       const idx = p.problemIndex;

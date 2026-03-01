@@ -125,6 +125,7 @@ model ContestScores {
   medalNames Json?
   medalCutoffs Json?
   problemScores Json?
+  promotionCutoff Int? // for USACO
   isPrivate Boolean @default(false)
   contest Contest @relation(fields: [contestId], references: [id], onDelete: Cascade)
 }

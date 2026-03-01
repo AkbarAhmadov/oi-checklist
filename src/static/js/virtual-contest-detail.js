@@ -1,3 +1,19 @@
+// Helper function to format contest source for display (specifically for USACO)
+function formatContestSourceDisplay(contestSource) {
+  const upperSource = contestSource.toUpperCase();
+  
+  // Check if it's a USACO division
+  if (['USACOSILVER', 'USACOBRONZE', 'USACOPLATINUM', 'USACOGOLD'].includes(upperSource)) {
+    // Convert USACOSILVER to USACO Silver, etc.
+    const division = upperSource.replace('USACO', '');
+    const capitalizedDivision = division.charAt(0).toUpperCase() + division.slice(1).toLowerCase();
+    return `USACO ${capitalizedDivision}`;
+  }
+  
+  // For non-USACO contests, return as uppercase
+  return upperSource;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const sessionToken = localStorage.getItem('sessionToken');
 
@@ -155,7 +171,7 @@ async function showUserContextModal(contest, userContext) {
   document.getElementById('vc-detail-loading').style.display = 'none';
   
   // Set dynamic description based on contest
-  const contestName = contest.contest ? `${contest.contest.source.toUpperCase()} ${contest.contest.year}${contest.contest.stage ? ` ${contest.contest.stage}` : ''}` : 'This contest';
+  const contestName = contest.contest ? `${formatContestSourceDisplay(contest.contest.source)} ${contest.contest.year}${contest.contest.stage ? ` ${contest.contest.stage}` : ''}` : 'This contest';
   description.textContent = `${contestName} requires some additional information since cutoffs differ by category.`;
   
   // Generate form fields
@@ -274,21 +290,27 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
   let medalText = 'No Medal';
   let rank = 'N/A';
   let totalParticipants = 'N/A';
-  let participantPercentile = 0;
-  let contestMean = 0;
-  let aboveAverage = 0;
+  let participantPercentile = null;
+  let contestMean = null;
+  let aboveAverage = null;
   let problemRanks = [];
 
   // Use new stats API for rank/participant data
-  if (contestStats) {
+  if (contestStats && contestStats.rank !== undefined && contestStats.total !== undefined) {
     rank = contestStats.rank;
     totalParticipants = contestStats.total;
-    contestMean = Math.round(contestStats.average);
-    aboveAverage = totalScore - contestMean;
+    
+    if (contestStats.average !== undefined) {
+      contestMean = Math.round(contestStats.average);
+      aboveAverage = totalScore - contestMean;
+    }
+    
     problemRanks = contestStats.ranks || [];
     
     // Calculate percentile from rank and total
-    participantPercentile = Math.round(((totalParticipants - rank + 1) / totalParticipants) * 100);
+    if (rank !== null && totalParticipants !== null && totalParticipants > 0) {
+      participantPercentile = Math.round(((totalParticipants - rank + 1) / totalParticipants) * 100);
+    }
   }
 
   // Calculate qualification status from user context data
@@ -325,6 +347,29 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
       }
     } catch (error) {
       console.warn('Failed to calculate qualification status:', error);
+    }
+  }
+
+  // Handle USACO promotion qualification
+  if (scoreData && scoreData.scores && scoreData.scores.promotionCutoff !== null && scoreData.scores.promotionCutoff !== undefined) {
+    const promotionCutoff = scoreData.scores.promotionCutoff;
+    const contestName = contest.contestName.toLowerCase();
+    
+    let nextDivision = '';
+    if (contestName.includes('bronze')) {
+      nextDivision = 'Silver';
+    } else if (contestName.includes('silver')) {
+      nextDivision = 'Gold';
+    } else if (contestName.includes('gold')) {
+      nextDivision = 'Platinum';
+    }
+    
+    // Only show promotion box for Bronze, Silver, and Gold (not Platinum)
+    if (nextDivision) {
+      qualificationLabel = `Promoted to ${nextDivision}`;
+      const isPromoted = totalScore >= promotionCutoff;
+      qualificationValue = isPromoted ? 'Yes' : 'No';
+      qualificationClass = isPromoted ? 'positive' : 'negative';
     }
   }
 
@@ -404,7 +449,7 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
     <div class="vc-detail-main ${medalClass}">
       <div class="vc-detail-header-section">
         <div>
-          <div class="vc-detail-title">${contest.contest.source.toUpperCase()} ${contest.contest.year}${contest.contest.stage ? ` ${contest.contest.stage}` : ''}</div>
+          <div class="vc-detail-title">${formatContestSourceDisplay(contest.contest.source)} ${contest.contest.year}${contest.contest.stage ? ` ${contest.contest.stage}` : ''}</div>
           <div class="vc-detail-subtitle">${problemCount} problems</div>
           ${contestMetadata.location || contestMetadata.website ?
       `<div class="vc-detail-location">${contestMetadata.location || ''}${contestMetadata.location && contestMetadata.website ? ' | ' :
@@ -428,8 +473,8 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
           </div>
         </div>
         <div class="vc-detail-rank">
-          <div class="rank-number">#${Math.min(rank, totalParticipants)}</div>
-          <div class="rank-text">out of ${totalParticipants}</div>
+          <div class="rank-number">#${rank !== 'N/A' && totalParticipants !== 'N/A' ? Math.min(rank, totalParticipants) : '-'}</div>
+          <div class="rank-text">out of ${totalParticipants !== 'N/A' ? totalParticipants : '-'}</div>
         </div>
       </div>
       
@@ -448,7 +493,7 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
         </div>
         <div class="vc-detail-meta-item">
           <div class="vc-detail-meta-label">Percentile</div>
-          <div class="vc-detail-meta-value">${formatOrdinal(participantPercentile)}</div>
+          <div class="vc-detail-meta-value">${participantPercentile !== null ? formatOrdinal(participantPercentile) : '-'}</div>
         </div>
         ${qualificationLabel ? `
         <div class="vc-detail-meta-item">
@@ -521,6 +566,7 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
           <div class="comparison-header">
             <span class="comparison-title">Performance</span>
           </div>
+          ${contestMean !== null ? `
           <div class="comparison-bars">
             <div class="score-bar">
               <div class="score-bar-container">
@@ -532,7 +578,7 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
                   <div class="score-bar-fill average" style="width: ${(contestMean / maxScore) * 100}%"></div>
                   <div class="score-bar-fill yours" style="width: ${(totalScore / maxScore) * 100}%"></div>
                 `}
-                <span class="score-bar-value">${contestMean}/${totalScore}</span>
+                <span class="score-bar-value">${totalScore}/${contestMean}</span>
               </div>
             </div>
           </div>
@@ -541,6 +587,19 @@ function displayContestDetails(contest, contestMetadata, problemsData, scoreData
               ${aboveAverage >= 0 ? '+' : ''}${parseFloat(aboveAverage.toFixed(2))} vs average
             </span>
           </div>
+          ` : `
+          <div class="comparison-bars">
+            <div class="score-bar">
+              <div class="score-bar-container">
+                <div class="score-bar-fill yours" style="width: ${(totalScore / maxScore) * 100}%"></div>
+                <span class="score-bar-value">${totalScore}/-</span>
+              </div>
+            </div>
+          </div>
+          <div class="comparison-summary">
+            <span class="comparison-delta">- vs average</span>
+          </div>
+          `}
         </div>
         ${!hasSubs ? `
         <div class="info-warning" id="completion-warning" style="display: block;">
@@ -1393,7 +1452,7 @@ function generateProblemsHTML(problemScores, contest, contestMetadata, problemsD
     // Use rank from stats API instead of calculating from score distributions
     let problemRank = 'N/A';
     let problemTotal = totalParticipants;
-    if (problemRanks && problemRanks.length > index && problemRanks[index] !== undefined) {
+    if (problemRanks && problemRanks.length > index && problemRanks[index] !== undefined && totalParticipants !== 'N/A') {
       problemRank = problemRanks[index];
     }
 
@@ -1412,7 +1471,7 @@ function generateProblemsHTML(problemScores, contest, contestMetadata, problemsD
         <div class="vc-detail-problem-header">
           <div class="vc-detail-problem-info">
             <div class="vc-detail-problem-name">${problemName}</div>
-            <div class="vc-detail-problem-rank">#${problemRank} of ${problemTotal}</div>
+            <div class="vc-detail-problem-rank">${problemRank !== 'N/A' && problemTotal !== 'N/A' ? `#${problemRank} of ${problemTotal}` : '-'}</div>
           </div>
           <div class="vc-detail-problem-score ${scoreClass}">${score}/100</div>
         </div>

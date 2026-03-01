@@ -58,7 +58,11 @@ function getFullOlympiadName(id) {
     BKOI: 'Balkan Olympiad in Informatics',
     CNOI: 'Chinese National Olympiad in Informatics',
     COCI: 'Croatian Open Competition in Informatics',
-    RMI: 'Romanian Master of Informatics'
+    RMI: 'Romanian Master of Informatics',
+    USACOBRONZE: 'USACO Bronze',
+    USACOSILVER: 'USACO Silver',
+    USACOGOLD: 'USACO Gold',
+    USACOPLATINUM: 'USACO Platinum'
   };
   return names[id] || id;
 }
