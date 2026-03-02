@@ -2631,16 +2631,6 @@ body.dark-mode .segment.active {
     color: #ffffff;
 }
 
-.dark-mode .vc-detail-main.medal-gold {
-    background-color: #2a2618;
-    border-left-color: #ffd700;
-}
-
-.dark-mode .vc-detail-main.medal-bronze {
-    background-color: #2a2018;
-    border-left-color: #cd7f32;
-}
-
 .dark-mode .vc-detail-main.medal-prizer {
     background-color: #1f2a3a;
     border-left-color: #4ea1f3;
