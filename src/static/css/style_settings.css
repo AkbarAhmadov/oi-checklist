@@ -321,16 +321,6 @@
   color: #ccc;
 }
 
-.dark-mode .settings-item-new {
-  background-color: #2a2a2a;
-  border-color: #444;
-}
-
-.dark-mode .settings-item-new:hover {
-  border-color: #666;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
 .dark-mode .settings-section-title-new {
   border-bottom-color: #444;
 }
@@ -341,14 +331,6 @@
 
 .dark-mode input:checked+.settings-toggle-slider-new {
   background-color: #28a745;
-}
-
-.dark-mode .settings-button-new {
-  background-color: #3399ff;
-}
-
-.dark-mode .settings-button-new:hover {
-  background-color: #287acc;
 }
 
 .dark-mode .settings-button-new.secondary {
@@ -535,28 +517,8 @@
 }
 
 /* Platform Preference - dark mode */
-.dark-mode #platform-pref .settings-item-title-new {
-  color: #fff;
-}
-
-.dark-mode #platform-pref .settings-item-description-new {
-  color: #ccc;
-}
 
 /* Panel container (kept simple; inherits card bg) */
-.dark-mode .platform-pref-panel {
-  background: transparent;
-}
-
-.dark-mode .platform-list li {
-  background: #2f2f2f;
-  border-color: #444;
-  color: #e6e6e6;
-}
-
-.dark-mode .platform-list li:hover {
-  background: #363636;
-}
 
 .dark-mode .platform-list li.dragging {
   opacity: .85;
@@ -574,4 +536,127 @@
 
 .dark-mode .drag-handle:hover {
   opacity: .9;
+}
+
+/* Theme Modal - normal styling with proper animation */
+.theme-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.theme-modal:not([hidden]) {
+  display: flex;
+}
+
+.theme-modal.show {
+  opacity: 1;
+}
+
+.theme-modal-content {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 400px;
+  color: #333;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.15s ease-in-out, opacity 0.15s ease-in-out;
+}
+
+.theme-modal.show .theme-modal-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.theme-modal-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.theme-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: white;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-option:hover {
+  background-color: #f8f9fa;
+  border-color: #007bff;
+}
+
+.theme-option.selected {
+  background-color: #e3f2fd;
+  border-color: #007bff;
+  border-width: 2px;
+}
+
+.theme-colors {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+.theme-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Dark mode styles */
+.dark-mode .theme-modal-content {
+  background: #333;
+  border-color: #555;
+  color: #ffffff;
+}
+
+.dark-mode .theme-modal-content h3 {
+  color: #ffffff;
+}
+
+.dark-mode .theme-option {
+  background-color: #333;
+  border-color: #555;
+}
+
+.dark-mode .theme-option:hover {
+  background-color: #444;
+  border-color: #666;
+}
+
+.dark-mode .theme-option.selected {
+  background-color: #555;
+  border-color: #777;
+}
+
+.dark-mode .theme-name {
+  color: #ffffff;
+}
+
+.dark-mode .theme-colors {
+  border-color: #666;
 }

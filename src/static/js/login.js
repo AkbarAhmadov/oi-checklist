@@ -22,7 +22,8 @@ document.getElementById('login-form')
         if (data.settings) {
           try {
             localStorage.setItem('yearSortOrder', data.settings.ascSort ? 'asc' : 'desc');
-            localStorage.setItem('theme', data.settings.darkMode ? 'dark-mode' : 'light-mode');
+            localStorage.setItem('theme', data.settings.darkMode ? 'darkClassic' : 'lightClassic');
+            localStorage.setItem('selectedDarkTheme', data.settings.darkMode ? 'darkClassic' : 'darkClassic');
             localStorage.setItem('platformPref', JSON.stringify(data.settings.platformPref));
           } catch (e) {
             console.warn('Failed to parse saved user settings from server:', e);

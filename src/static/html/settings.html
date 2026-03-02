@@ -111,6 +111,21 @@
         </div>
       </div>
 
+      <!-- Theme Selection -->
+      <div class="settings-item-new">
+        <div class="settings-item-info-new">
+          <h3 class="settings-item-title-new">Theme</h3>
+          <p class="settings-item-description-new">
+            Choose your preferred theme appearance.
+          </p>
+        </div>
+        <div class="settings-control-new">
+          <button id="theme-selector" class="settings-button-new">
+            Choose
+          </button>
+        </div>
+      </div>
+
       <!-- ------------- Platform Preference ------------- -->
       <div class="settings-item-new" id="platform-pref">
         <div class="settings-item-info-new">
@@ -152,6 +167,26 @@
     <!-- Sync -->
     <div style="width:100%;display:flex;justify-content:center;margin:2rem 0 0 0;">
       <button id="sync-settings-button" class="settings-button-new green">Sync Settings to Account</button>
+    </div>
+  </div>
+
+  <!-- Theme Modal -->
+  <div id="theme-modal" class="theme-modal" hidden>
+    <div class="theme-modal-content">
+      <h3>Choose Theme</h3>
+      <div class="theme-options">
+        <div class="theme-option" data-theme="lightClassic">
+          <div class="theme-name">Light Classic</div>
+        </div>
+        
+        <div class="theme-option" data-theme="darkClassic">
+          <div class="theme-name">Dark Classic</div>
+        </div>
+        
+        <div class="theme-option" data-theme="darkMuted">
+          <div class="theme-name">Dark Muted</div>
+        </div>
+      </div>
     </div>
   </div>
 

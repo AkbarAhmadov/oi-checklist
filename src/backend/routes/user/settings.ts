@@ -2,6 +2,7 @@ import createError from 'http-errors';
 import { db } from '@db';
 import { Olympiads, Platforms } from '@config';
 import { FastifyInstance } from 'fastify';
+import { Theme } from '@prisma/client';
 
 export async function settings(app: FastifyInstance) {
   // special edge case for usaco since it's the only one that's grouped
@@ -22,10 +23,17 @@ export async function settings(app: FastifyInstance) {
         }
         try {
           let params: Record<string, any> = {};
-          for (const i of ['checklistPublic', 'ascSort', 'darkMode'] as const) {
+          for (const i of ['checklistPublic', 'ascSort'] as const) {
             if (i in updated) {
               params[i] = Boolean(updated[i]);
             }
+          }
+          if ('theme' in updated) {
+            const theme = updated.theme;
+            if (typeof theme != 'string' || !(theme in Theme)) {
+              throw createError.BadRequest(`Invalid theme "${theme}"`);
+            }
+            params.theme = Theme[theme];
           }
           for (const i of ['olympiadOrder', 'hiddenOlympiads', 'platformPref'] as const) {
             if (!(i in updated)) {

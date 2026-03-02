@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         token: session_token,
         updated: {
           ascSort: (typeof yearSortOrder === 'string' ? yearSortOrder : '').toLowerCase() === 'asc',
-          darkMode: localStorage.getItem('theme') == 'dark-mode'
+          darkMode: (localStorage.getItem('theme') || '').includes('dark')
         }
       };
       if (Array.isArray(platformPrefDraft) && platformPrefDraft.length > 0) {
@@ -326,6 +326,99 @@ document.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => {
           exportDataButton.textContent = originalText;
         }, 2000);
+      }
+    });
+  }
+
+  /* ------- Theme Selector ------- */
+  const themeSelector = document.getElementById('theme-selector');
+  const themeModal = document.getElementById('theme-modal');
+  const themeOptions = document.querySelectorAll('.theme-option');
+  
+  if (themeSelector && themeModal) {
+    const themeNames = {
+      lightClassic: 'Light Classic',
+      darkClassic: 'Dark Classic',
+      darkMuted: 'Dark Muted'
+    };
+    
+    // Update selected option
+    function updateSelected() {
+      const current = localStorage.getItem('theme') || 'lightClassic';
+      themeOptions.forEach(option => {
+        if (option.dataset.theme === current) {
+          option.classList.add('selected');
+        } else {
+          option.classList.remove('selected');
+        }
+      });
+    }
+    
+    updateSelected();
+    
+    // Open modal with animation
+    themeSelector.addEventListener('click', () => {
+      themeModal.hidden = false;
+      setTimeout(() => {
+        themeModal.classList.add('show');
+      }, 10);
+    });
+    
+    // Close modal with animation
+    function closeModal() {
+      themeModal.classList.remove('show');
+      setTimeout(() => {
+        themeModal.hidden = true;
+      }, 150);
+    }
+    
+    // Close on backdrop click (clicking outside the content)
+    themeModal.addEventListener('click', (e) => {
+      if (e.target === themeModal) {
+        closeModal();
+      }
+    });
+    
+    // Handle theme selection
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const newTheme = option.dataset.theme;
+        localStorage.setItem('theme', newTheme);
+        
+        updateSelected();
+        
+        if (newTheme === 'darkClassic' || newTheme === 'darkMuted') {
+          localStorage.setItem('selectedDarkTheme', newTheme);
+          document.body.classList.add('dark-mode');
+          document.documentElement.classList.add('dark-mode');
+          
+          // Trigger dark mode CSS update for theme-specific colors
+          if (typeof darkModeCss === 'function') {
+            darkModeCss();
+          }
+          
+          const toggleSwitch = document.getElementById('dark-mode-switch');
+          if (toggleSwitch) {
+            toggleSwitch.checked = true;
+          }
+        } else {
+          document.body.classList.remove('dark-mode');
+          document.documentElement.classList.remove('dark-mode');
+          
+          const toggleSwitch = document.getElementById('dark-mode-switch');
+          if (toggleSwitch) {
+            toggleSwitch.checked = false;
+          }
+        }
+        
+        closeModal();
+      });
+    });
+    
+    // Close on escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !themeModal.hidden) {
+        closeModal();
       }
     });
   }

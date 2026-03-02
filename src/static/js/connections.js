@@ -463,7 +463,7 @@ function showGoogleError(message) {
   messageBox.style.display = 'block';
   messageBox.textContent = message;
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'light-mode') === 'light-mode' ?
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ?
       'black' :
       'white';
 }
@@ -476,7 +476,7 @@ async function onSubmitOjuzCookie(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Validating cookie...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'light-mode') === 'light-mode' ?
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ?
       'black' :
       'white';
 
@@ -550,7 +550,7 @@ async function onSubmitOjuzUsername(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Saving username...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'light-mode') === 'light-mode' ?
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ?
       'black' :
       'white';
 
@@ -691,7 +691,7 @@ async function onSubmitQojCookie(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Validating cookie...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'light-mode') === 'light-mode' ? 'black' : 'white';
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
 
   if (!cookieVal) {
     messageBox.textContent = 'Please paste your qoj.ac session cookie value.';
@@ -757,7 +757,7 @@ async function onSubmitQojUsername(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Saving username...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'light-mode') === 'light-mode' ? 'black' : 'white';
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
 
   if (!username) {
     messageBox.textContent = 'Please enter your qoj.ac username.';
@@ -894,7 +894,7 @@ async function onSubmitCodechefCookie(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Validating cookie...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'light-mode') === 'light-mode' ? 'black' : 'white';
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
 
   if (!cookieVal) {
     messageBox.textContent = 'Please paste your Codechef session cookie value.';
@@ -960,7 +960,7 @@ async function onSubmitCodechefUsername(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Saving username...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'light-mode') === 'light-mode' ? 'black' : 'white';
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
 
   if (!username) {
     messageBox.textContent = 'Please enter your Codechef username.';

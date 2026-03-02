@@ -68,11 +68,17 @@ model UserProblemData {
   @@id([userId, problemId])
 }
 
+enum Theme {
+  lightClassic
+  darkClassic
+  darkMuted
+}
+
 model Settings {
   userId Int @id
   checklistPublic Boolean @default(false)
   ascSort Boolean @default(false)
-  darkMode Boolean @default(false)
+  theme Theme @default(lightClassic)
   olympiadOrder Json?
   platformPref Json?
   hiddenOlympiads Json?

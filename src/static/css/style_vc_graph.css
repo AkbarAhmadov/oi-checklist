@@ -25,10 +25,6 @@
 
 /* --- Dark mode overrides for analysis graph --- */
 .dark-mode { --card-bg: #333333; }
-.dark-mode .analysis-graphs {
-  background-color: var(--card-bg, #1f1f1f);
-  border-color: #444444;
-}
 .dark-mode .analysis-graphs-title { color: #eaeaea; }
 .dark-mode .graph-legend { color: #e0e0e0; }
 .dark-mode .graph-legend.off { opacity: .5; }
@@ -65,9 +61,6 @@
 
 /* No caret for minimal style */
 .timeline-tooltip::after{ content:none; }
-
-/* Dark mode */
-.dark-mode .analysis-timeline{ background-color:#333333; border-color:#444444; }
 
 .dark-mode .timeline-tooltip{
   --tt-bg: #1e1e1e; /* match site dark bg */

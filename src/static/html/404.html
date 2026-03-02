@@ -26,7 +26,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const theme = localStorage.getItem('theme');
-      if (theme === 'dark-mode') {
+      if (theme === 'darkClassic' || theme === 'darkMuted' || theme === 'dark-mode') {
         document.body.classList.add('dark-mode');
       }
     });

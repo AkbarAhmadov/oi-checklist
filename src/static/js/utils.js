@@ -446,31 +446,78 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Dark mode
 document.addEventListener('DOMContentLoaded', function () {
   const toggleSwitch = document.getElementById('dark-mode-switch');
+  const themeSelector = document.getElementById('theme-selector');
+  
   if (!toggleSwitch) {
-    let currentTheme = localStorage.getItem('theme') || 'light-mode';
-    if (currentTheme === 'dark-mode') {
+    let currentTheme = localStorage.getItem('theme') || 'lightClassic';
+    if (currentTheme === 'darkClassic' || currentTheme === 'darkMuted' || currentTheme === 'dark-mode') {
       document.body.classList.add('dark-mode');
       document.documentElement.classList.add('dark-mode');
     }
     return;
   }
 
-  let currentTheme = localStorage.getItem('theme') || 'light-mode';
+  let currentTheme = localStorage.getItem('theme') || 'lightClassic';
+  let selectedDarkTheme = localStorage.getItem('selectedDarkTheme') || 'darkClassic';
+  
+  // Handle legacy 'dark-mode' theme
   if (currentTheme === 'dark-mode') {
+    currentTheme = 'darkClassic';
+    localStorage.setItem('theme', 'darkClassic');
+    localStorage.setItem('selectedDarkTheme', 'darkClassic');
+  }
+  
+  // Apply current theme
+  if (currentTheme === 'darkClassic' || currentTheme === 'darkMuted') {
     document.body.classList.add('dark-mode');
     document.documentElement.classList.add('dark-mode');
     toggleSwitch.checked = true;
   }
+  
+  // Set theme selector value if available
+  if (themeSelector) {
+    themeSelector.value = currentTheme;
+    
+    themeSelector.addEventListener('change', function(e) {
+      const newTheme = e.target.value;
+      localStorage.setItem('theme', newTheme);
+      
+      if (newTheme === 'darkClassic' || newTheme === 'darkMuted') {
+        localStorage.setItem('selectedDarkTheme', newTheme);
+        document.body.classList.add('dark-mode');
+        document.documentElement.classList.add('dark-mode');
+        toggleSwitch.checked = true;
+      } else {
+        document.body.classList.remove('dark-mode');
+        document.documentElement.classList.remove('dark-mode');
+        toggleSwitch.checked = false;
+      }
+    });
+  }
 
   toggleSwitch.addEventListener('change', function (e) {
     if (e.target.checked) {
+      const darkTheme = localStorage.getItem('selectedDarkTheme') || 'darkClassic';
       document.body.classList.add('dark-mode');
       document.documentElement.classList.add('dark-mode');
-      localStorage.setItem('theme', 'dark-mode');
+      localStorage.setItem('theme', darkTheme);
+      
+      // Trigger dark mode CSS update for theme-specific colors
+      if (typeof darkModeCss === 'function') {
+        darkModeCss();
+      }
+      
+      if (themeSelector) {
+        themeSelector.value = darkTheme;
+      }
     } else {
       document.body.classList.remove('dark-mode');
       document.documentElement.classList.remove('dark-mode');
-      localStorage.setItem('theme', 'light-mode');
+      localStorage.setItem('theme', 'lightClassic');
+      
+      if (themeSelector) {
+        themeSelector.value = 'lightClassic';
+      }
     }
   });
 });

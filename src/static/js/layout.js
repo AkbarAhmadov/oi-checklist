@@ -107,8 +107,8 @@ function saveOlympiadOrder() {
   const sessionToken = localStorage.getItem('sessionToken');
   const messageBox = document.getElementById('popup-message-oly-save');
   messageBox.style.display = 'block';
-  let currentTheme = localStorage.getItem('theme') || 'light-mode';
-  messageBox.color = currentTheme == 'light-mode' ? 'black' : 'white';
+  let currentTheme = localStorage.getItem('theme') || 'lightClassic';
+  messageBox.color = currentTheme == 'lightClassic' ? 'black' : 'white';
   fetch(apiUrl + '/user/settings', {
     method: 'POST',
     credentials: 'include',

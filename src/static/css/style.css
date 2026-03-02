@@ -30,26 +30,6 @@
   border-bottom: 2px solid #0177CC;
 }
 
-/* Dark mode overrides */
-body.dark-mode .tab-switcher {
-  border-bottom: 1px solid #555;
-}
-
-body.dark-mode .tab-switcher .tab {
-  background: #222;
-  color: #eee;
-}
-
-body.dark-mode .tab-switcher .tab:hover {
-  background-color: #333;
-}
-
-body.dark-mode .tab-switcher .tab.active {
-  background-color: #3399ff; /* dark mode primary */
-  border-bottom: 2px solid #3399ff;
-  color: #fff;
-}
-
 /* --- oj.uz username-only section styles --- */
 .ojuz-section {
   background-color: #e8f5e8;
@@ -58,22 +38,12 @@ body.dark-mode .tab-switcher .tab.active {
   margin: 1.5rem 0;
 }
 
-.dark-mode .ojuz-section {
-  background-color: #1e3e1e;
-  border-color: #28a745;
-}
-
 /* CodeChef section styles */
 .codechef-section {
   background-color: #efebe9; /* Brown 50 */
   border: 1px solid #795548; /* Brown 500 */
   padding: 1rem;
   margin: 1.5rem 0;
-}
-
-.dark-mode .codechef-section {
-  background-color: #3e2723; /* Brown 900 */
-  border-color: #8d6e63; /* Brown 400 */
 }
 
 .codechef-section .form-row label {
@@ -91,12 +61,6 @@ body.dark-mode .tab-switcher .tab.active {
   box-sizing: border-box;
 }
 
-.dark-mode .codechef-section .vc-input {
-  background: #222;
-  color: #eee;
-  border-color: #555;
-}
-
 /* CodeChef connect button style */
 .connect-button.codechef {
     background-color: #795548;
@@ -104,14 +68,6 @@ body.dark-mode .tab-switcher .tab.active {
 
 .connect-button.codechef:hover {
     background-color: #5d4037;
-}
-
-body.dark-mode .connect-button.codechef {
-    background-color: #8d6e63;
-}
-
-body.dark-mode .connect-button.codechef:hover {
-    background-color: #6d4c41;
 }
 
 /* Better spacing between label and input */
@@ -131,21 +87,11 @@ body.dark-mode .connect-button.codechef:hover {
   box-sizing: border-box;
 }
 
-.dark-mode .ojuz-section .vc-input {
-  background: #222;
-  color: #eee;
-  border-color: #555;
-}
-
 .form-note {
   font-size: 0.9rem;
   color: var(--text-secondary, #666);
   margin-top: 0.5rem;
   font-style: italic;
-}
-
-.dark-mode .form-note {
-  color: #aaa;
 }
 
 /* --- Note editor layout fixes --- */
@@ -175,10 +121,6 @@ body.dark-mode .connect-button.codechef:hover {
     margin: 0 .25rem;
 }
 
-body.dark-mode .md-toolbar-sep {
-    background: #444;
-}
-
 .md-textarea,
 .md-preview {
     width: 100%;
@@ -202,12 +144,6 @@ body.dark-mode .md-toolbar-sep {
 
 .md-preview pre {
     overflow: auto;
-}
-
-.dark-mode .md-preview {
-    border-color: #3a3a3a;
-    background: #1f1f1f;
-    color: #e6e6e6;
 }
 
 body {
@@ -380,22 +316,10 @@ h2 {
     color: #555;
 }
 
-.dark-mode .note-icon {
-    color: #bbb;
-}
-
-.dark-mode .note-icon:hover {
-    color: #fff;
-}
-
 /* Filled state when a note exists */
 .note-icon.has-note {
     opacity: 0.95;
     color: #3f51b5;
-}
-
-.dark-mode .note-icon.has-note {
-    color: #82c6ff;
 }
 
 #popup-status {
@@ -690,54 +614,6 @@ h2 {
     }
 }
 
-/* Dark mode styles for login page: */
-.dark-mode .login-container {
-    background-color: #1e1e1e;
-    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05);
-}
-
-.dark-mode .login-container h2 {
-    color: #ffffff;
-}
-
-.dark-mode .input-field {
-    background-color: #2a2a2a;
-    border: 1px solid #444;
-    color: #f0f0f0;
-}
-
-.dark-mode .input-field:focus {
-    border-color: #888;
-}
-
-.dark-mode .error-message {
-    color: #ff6b6b;
-}
-
-.dark-mode .btn-login {
-    background-color: #333;
-    border: 1px solid #555;
-    color: #f0f0f0;
-}
-
-.dark-mode .btn-login:hover {
-    background-color: #555;
-    color: #ffffff;
-    font-weight: bold;
-}
-
-.dark-mode .footer {
-    color: #aaa;
-}
-
-.dark-mode .footer a {
-    color: #bbb;
-}
-
-.dark-mode .footer a:hover {
-    color: #fff;
-}
-
 /* Skeleton loading animation for problem cells */
 .problem-cell.skeleton {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 37%, #f0f0f0 63%);
@@ -796,89 +672,6 @@ input:not(:checked)+.slider {
     background-size: 35px 35px;
 }
 
-/* Dark mode styles */
-.dark-mode {
-    background-color: #1e1e1e;
-    color: #ffffff
-}
-
-.dark-mode .navbar-title,
-.dark-mode .welcome-message,
-.dark-mode .logout-button {
-    color: #ffffff;
-}
-
-.dark-mode .year-cell,
-.dark-mode .day-cell {
-    background-color: #202938;
-}
-
-.dark-mode table,
-.dark-mode td,
-.dark-mode th {
-    border: 1px solid #2a2a2a;
-    /* softer gray border */
-}
-
-.dark-mode .white {
-    background-color: #1b1b1b;
-}
-
-.dark-mode .green {
-    background-color: #64cd69;
-}
-
-.dark-mode .yellow {
-    background-color: #e6b800;
-}
-
-.dark-mode .red {
-    background-color: #f44336;
-}
-
-.dark-mode .problem-cell.skeleton {
-    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 37%, #2a2a2a 63%);
-    background-size: 400% 100%;
-    animation: shimmer 1.2s ease-in-out infinite;
-    color: transparent;
-    height: 20px;
-    padding: 12px;
-}
-
-.dark-mode #status-popup {
-    background: #2a2a2a;
-    border-color: #444;
-    color: #f0f0f0;
-}
-
-.dark-mode #popup-status {
-    color: #f0f0f0;
-}
-
-.dark-mode #popup-status.yellow {
-    color: #000000;
-}
-
-.dark-mode #popup-status.green {
-    color: #ffffff;
-}
-
-.dark-mode #popup-status.red {
-    color: #ffffff;
-}
-
-.dark-mode #popup-score {
-    color: #4ea1f3;
-}
-
-.dark-mode .popup-out-of {
-    color: #4ea1f3;
-}
-
-.dark-mode .popup-score span:focus {
-    background-color: #3a3a3a;
-}
-
 /* Solve Count */
 #solve-count-container {
     border-bottom: 1px solid #ddd;
@@ -927,10 +720,6 @@ input:not(:checked)+.slider {
     background-color: #e5e5e5;
 }
 
-.dark-mode .progress-segment.white {
-    background-color: #353535;
-}
-
 /* Basic styling for settings button and icon - Removed border-radius, faster transitions, fixed color */
 .settings-button {
     background: none;
@@ -949,21 +738,12 @@ input:not(:checked)+.slider {
 }
 
 /* Assuming dark mode needs separate hover */
-body.dark-mode .settings-button:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-}
 
 .settings-icon {
     /* Using specific colors as vars are not desired */
     color: #333;
     /* Light mode icon color */
     transition: color 0.15s ease;
-}
-
-/* Assuming dark mode needs a different icon color */
-body.dark-mode .settings-icon {
-    color: #fff;
-    /* Dark mode icon color */
 }
 
 /* Dropdown styling - Removed border-radius, faster transitions, fixed colors */
@@ -999,14 +779,6 @@ body.dark-mode .settings-icon {
     -webkit-backdrop-filter: blur(10px);
 }
 
-/* Assuming dark mode needs different dropdown colors */
-body.dark-mode .settings-dropdown {
-    background-color: rgba(51, 51, 51, 0.95);
-    /* Dark mode background (with transparency for blur) */
-    border-color: #555;
-    /* Dark mode border */
-}
-
 
 .settings-container.active .settings-dropdown {
     opacity: 1;
@@ -1039,12 +811,6 @@ body.dark-mode .settings-dropdown {
     display: inline-block;
     text-align: center;
     transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Assuming dark mode needs different label text color */
-body.dark-mode .settings-label {
-    color: #fff;
-    /* Dark mode text color */
 }
 
 .settings-item.red .settings-label,
@@ -1096,14 +862,6 @@ body.dark-mode .settings-label {
 
 .general-button:hover {
     background-color: #e0e0e0;
-}
-
-body.dark-mode .general-button {
-    color: #fff;
-}
-
-body.dark-mode .general-button:hover {
-    background-color: #444;
 }
 
 /* general page container */
@@ -1176,23 +934,6 @@ body.dark-mode .general-button:hover {
 
 .connect-button:hover {
     background-color: #005fa3;
-}
-
-/* dark-mode overrides (if you want) */
-body.dark-mode .connection-card {
-    background-color: #2b2b2b;
-}
-
-body.dark-mode .connection-name {
-    color: #eee;
-}
-
-body.dark-mode .connect-button {
-    background-color: #3399ff;
-}
-
-body.dark-mode .connect-button:hover {
-    background-color: #287acc;
 }
 
 .popup-overlay {
@@ -1313,30 +1054,6 @@ body.dark-mode .connect-button:hover {
     background-color: #005fa3;
 }
 
-body.dark-mode .popup {
-    background-color: #1e1e1e;
-    color: #eee;
-}
-
-body.dark-mode .cookie-instruction {
-    background-color: #2d2d2d;
-    color: #ccc;
-}
-
-body.dark-mode .cookie-input {
-    background-color: #333;
-    color: #eee;
-    border: 1px solid #555;
-}
-
-body.dark-mode .submit-cookie-button {
-    background-color: #3399ff;
-}
-
-body.dark-mode .submit-cookie-button:hover {
-    background-color: #287acc;
-}
-
 #popup-message {
     display: none;
     margin-bottom: 10px;
@@ -1425,27 +1142,6 @@ body.dark-mode .submit-cookie-button:hover {
 
 .bronze {
     background-color: #cd7f32;
-}
-
-/* Dark Mode Overrides */
-.dark-mode .usaco-tab.platinum {
-    background-color: #d0d0d0;
-    color: #1a1a1a;
-}
-
-.dark-mode .usaco-tab.gold {
-    background-color: #ffd700;
-    color: #333300;
-}
-
-.dark-mode .usaco-tab.silver {
-    background-color: #e0e0e0;
-    color: #222222;
-}
-
-.dark-mode .usaco-tab.bronze {
-    background-color: #de985c;
-    color: #3a1f0f;
 }
 
 .usaco-header {
@@ -1680,16 +1376,6 @@ body,
     border-radius: 50px;
 }
 
-.dark-mode .separator::before,
-.dark-mode .separator::after {
-    border-top-color: #444;
-}
-
-.dark-mode .separator span {
-    background-color: #1e1e1e;
-    color: #aaa;
-}
-
 .popup-body a {
     color: #4ea1f3;
     /* soft blue that fits dark backgrounds */
@@ -1758,12 +1444,7 @@ body,
         font-size: 0.9rem;
         padding: 0.3rem 0.6rem;
     }
-
-    .dark-mode-toggle {
-        order: 2;
-        transform: scale(0.9);
-    }
-
+    
     .settings-container {
         order: 4;
         transform: scale(0.9);
@@ -2079,10 +1760,6 @@ body,
     background-color: #e5e5e5;
 }
 
-.dark-mode .section-progress-bar .progress-segment.white {
-    background-color: #2a2a2a;
-}
-
 /* Ensure section progress bars are visible but smaller */
 .table-container .section-progress-bar {
     margin: 0.5rem 0 1rem 0;
@@ -2112,10 +1789,6 @@ body,
     fill: black;
 }
 
-.dark-mode .home-icon-svg path {
-    fill: white;
-}
-
 /* Empty state styling */
 .empty-state {
     text-align: center;
@@ -2138,20 +1811,6 @@ body,
     line-height: 1.5;
 }
 
-/* Dark mode support */
-.dark-mode .empty-state {
-    background-color: #1e1e1e;
-    border-color: #1e1e1e;
-}
-
-.dark-mode .empty-state h3 {
-    color: #ffffff;
-}
-
-.dark-mode .empty-state p {
-    color: #cccccc;
-}
-
 /* --- Markdown editor (Obsidian-like live preview) --- */
 .md-toolbar {
     display: flex;
@@ -2170,15 +1829,6 @@ body,
 
 .md-btn:hover {
     background: #f2f2f2;
-}
-
-body.dark-mode .md-btn {
-    border-color: #555;
-    color: #eee;
-}
-
-body.dark-mode .md-btn:hover {
-    background: #2a2f36;
 }
 
 /* Markdown editor refinements */
@@ -2219,25 +1869,6 @@ body.dark-mode .md-btn:hover {
     overflow: auto;
 }
 
-body.dark-mode .md-editor {
-    background: #1b1b1b;
-    border-color: #333;
-}
-
-body.dark-mode .md-line.editing {
-    background: #262b31;
-}
-
-body.dark-mode .md-line code {
-    background: #2a2f36;
-}
-
-body.dark-mode .md-line pre {
-    background: #1f242a;
-    border-color: #2b3138;
-    color: #e6e6e6;
-}
-
 /* --- Markdown textarea (true textbox) --- */
 .md-textarea {
     width: 100%;
@@ -2255,16 +1886,4 @@ body.dark-mode .md-line pre {
 .md-textarea:focus {
     border-color: #4ea1f3;
     box-shadow: 0 0 0 3px rgba(78, 161, 243, .25);
-}
-
-.dark-mode .md-textarea {
-    color: #e6e6e6;
-    background: #222;
-    border-color: #3a3a3a;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .2);
-}
-
-.dark-mode .md-textarea:focus {
-    border-color: #82c6ff;
-    box-shadow: 0 0 0 3px rgba(130, 198, 255, .25);
 }
