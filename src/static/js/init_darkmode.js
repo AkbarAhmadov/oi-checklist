@@ -542,13 +542,14 @@ body.dark-mode .md-line pre {
   document.head.appendChild(styleVc);
 }
 
-const theme = localStorage.getItem('theme');
+let theme = localStorage.getItem('theme');
 if (theme == null || theme == 'light-mode') {
   theme = 'lightClassic';
 }
 if (theme == 'dark-mode') {
   theme = 'darkClassic';
 }
+localStorage.setItem('theme', theme);
 
 if (theme != 'lightClassic') {
   document.documentElement.classList.add('dark-mode');
