@@ -543,6 +543,13 @@ body.dark-mode .md-line pre {
 }
 
 const theme = localStorage.getItem('theme');
+if (theme == null || theme == 'light-mode') {
+  theme = 'lightClassic';
+}
+if (theme == 'dark-mode') {
+  theme = 'darkClassic';
+}
+
 if (theme != 'lightClassic') {
   document.documentElement.classList.add('dark-mode');
   darkModeCss();
