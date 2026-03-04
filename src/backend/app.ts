@@ -65,7 +65,9 @@ for (const i of ['js', 'css', 'images']) {
   });
 }
 
-app.setErrorHandler((err, req, res) => {
+import type { FastifyError } from 'fastify';
+
+app.setErrorHandler((err : FastifyError, req, res) => {
   if (err.validation) {
     res.status(400).send({ error: 'Bad request', message: err.message, details: err.validation });
     return;
