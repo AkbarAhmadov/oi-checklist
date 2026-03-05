@@ -132,6 +132,8 @@ Create a `.env` file with the following values:
 | `GOOGLE_CLIENT_SECRET` | Your Google client secret |
 | `QOJ_USER` | Username for the qoj.ac account used for scraping |
 | `QOJ_PASS` | Password for the same qoj.ac account |
+| `GMAIL_USER` | Email address for a Google account that will be used to send automated emails |
+| `GMAIL_PASS` | App password for that Google account, can be generated after enabling two-factor authentication |
 
 Note that every variable other than the first two isn't strictly required for the app to work. The client IDs and secrets are only needed for OAuth (which you may not need if you're running this locally). The qoj.ac username and password variables are needed for qoj.ac virtual contest scraping (which, again, you may or may not need).
 
