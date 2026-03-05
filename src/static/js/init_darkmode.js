@@ -412,6 +412,33 @@ body.dark-mode .md-line pre {
   border-color: #82c6ff;
   box-shadow: 0 0 0 3px rgba(130, 198, 255, .25);
 }
+
+/* Dark mode email connection styles */
+.dark-mode .email-form .vc-input {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #f0f0f0;
+}
+
+.dark-mode .email-form .vc-input:focus {
+  border-color: #82c6ff;
+}
+
+.dark-mode .email-status.success {
+  background-color: #1e3a1e;
+  color: #4caf50;
+  border-color: #2e5a2e;
+}
+
+.dark-mode .email-status.error {
+  background-color: #3a1e1e;
+  color: #f44336;
+  border-color: #5a2e2e;
+}
+
+.dark-mode .email-display {
+  color: #ccc;
+}
 `;
   document.head.appendChild(styleDashboard);
 

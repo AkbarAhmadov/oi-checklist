@@ -16,10 +16,11 @@ export async function settings(app: FastifyInstance) {
         throw createError.Unauthorized('Invalid session');
       }
       let user = await db.user.findUnique({ where: { id: session.userId }, include: { settings: true } });
+      const settings = { ...user.settings, email: user.email };
       if (!username || user.username == username) {
         const { updated } = req.body;
         if (!updated) {
-          return user.settings ?? {};
+          return settings;
         }
         try {
           let params: Record<string, any> = {};
@@ -57,7 +58,7 @@ export async function settings(app: FastifyInstance) {
             if (typeof names != 'object' || names === null || Array.isArray(names)) {
               throw createError.BadRequest('platformUsernames must be an object');
             }
-            const existing = (user.settings?.platformUsernames ?? {}) as Record<string, string>;
+            const existing = (settings?.platformUsernames ?? {}) as Record<string, string>;
             for (const [i, j] of Object.entries(names)) {
               if (!Platforms.has(i)) {
                 throw createError.BadRequest(`Invalid platform "${i}" in platformUsernames`);
@@ -88,7 +89,7 @@ export async function settings(app: FastifyInstance) {
       if (!user?.settings?.checklistPublic) {
         throw createError.Forbidden('User missing or checklist private');
       }
-      return user.settings ?? {};
+      return settings;
     }
     throw createError.BadRequest('Username unspecified');
   });

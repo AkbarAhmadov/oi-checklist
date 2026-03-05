@@ -1,6 +1,7 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import { spawnSync } from 'child_process';
+import nodemailer from 'nodemailer';
 
 export const Olympiads = new Set([
   'apio', 'bkoi', 'boi', 'ceoi',
@@ -57,7 +58,8 @@ export const DiscordClientSecret = validateEnv('DISCORD_CLIENT_SECRET');
 export const QojUsername = validateEnv('QOJ_USER');
 export const QojPassword = validateEnv('QOJ_PASS');
 export const EncryptionKey = Buffer.from(validateEnv('ENCRYPTION_KEY', false), 'hex');
-
+export const GmailUsername = validateEnv('GMAIL_USER', false);
+export const GmailPassword = validateEnv('GMAIL_PASS', false);
 export const RootUrl = validateEnv('ROOT_URL');
 
 function validatePython() {
@@ -136,3 +138,18 @@ export const contestContexts: Record<string, ContestContext> = {
     }
   }
 } as const;
+
+export const mail = {
+  transporter: GmailUsername && GmailPassword ? nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: { user: GmailUsername, pass: GmailPassword }
+  }) : null,
+  async send(opts: nodemailer.SendMailOptions) {
+    if (!this.transporter) {
+      throw new Error('Email not configured (missing GMAIL_USER/GMAIL_PASS in .env)');
+    }
+    return this.transporter.sendMail(opts);
+  }
+};

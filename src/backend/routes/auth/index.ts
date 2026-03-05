@@ -6,6 +6,7 @@ import { check } from './check';
 import { github } from './github';
 import { discord } from './discord';
 import { google } from './google';
+import { mail } from './mail';
 
 export async function auth(app: FastifyInstance) {
   app.register(register);
@@ -15,4 +16,5 @@ export async function auth(app: FastifyInstance) {
   app.register(github);
   app.register(discord);
   app.register(google);
+  app.register(mail);
 }

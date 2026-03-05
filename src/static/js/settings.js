@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const checklistVisibilityItem = document.getElementById('checklist-visibility-item');
   const visibilityBadge = document.getElementById('visibility-badge');
 
+  // Email connection elements
+  const currentEmailDisplay = document.getElementById('settings-current-email');
+  const emailConnectButton = document.querySelector('a[href="email"]');
+  const emailDescription = document.querySelector('a[href="email"]').parentElement.previousElementSibling.querySelector('.settings-item-description-new');
+
   try {
     const response = await fetch(`${apiUrl}/user/settings`, {
       method: 'POST',
@@ -21,6 +26,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (response.ok) {
       const data = await response.json();
       updateVisibilityUI(checklistVisibilityItem, visibilityBadge, data.checklistPublic);
+      
+      // Update email connection display
+      if (data.email && currentEmailDisplay && emailConnectButton && emailDescription) {
+        currentEmailDisplay.textContent = `Connected: ${data.email}`;
+        currentEmailDisplay.style.display = 'block';
+        emailConnectButton.textContent = 'Manage';
+        emailDescription.style.display = 'none'; // Hide the description
+      }
     }
   } catch { }
 
