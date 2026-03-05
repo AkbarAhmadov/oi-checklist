@@ -123,7 +123,7 @@ Create a `.env` file with the following values:
 | Variable | Description |
 | - | - |
 | `DATABASE_PATH` | The exact path to a `.db` file that we'll make in the next step. You can set this to any path you want; for example; I use `file:/Users/avighna/Desktop/oi-checklist/database.db` |
-| `ROOT_URL` | Set this to `http://localhost:5501/` |
+| `ROOT_URL` | Set this to `http://localhost:5501` |
 | `GITHUB_CLIENT_ID` | Your GitHub client ID |
 | `GITHUB_CLIENT_SECRET` | Your GitHub client secret |
 | `DISCORD_CLIENT_ID` | Your Discord client ID |
