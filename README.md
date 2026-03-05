@@ -176,6 +176,7 @@ Below is a brief overview of the key endpoints exposed by the backend.
 - `/github`
 - `/discord`
 - `/google`
+- `/mail`
 
 #### prefix: `/data`
 - `/problems`
