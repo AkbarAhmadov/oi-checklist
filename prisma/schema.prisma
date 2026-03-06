@@ -20,6 +20,7 @@ model User {
   virtualContests UserVirtualContest[]
   activeVirtualContest ActiveVirtualContest?
   pendingEmail  PendingEmail?
+  resetPasswordToken ResetPasswordToken?
   following Follow[] @relation("UserFollows")
   followers Follow[] @relation("UserFollowedBy")
 }
@@ -31,6 +32,13 @@ model PendingEmail {
   createdAt DateTime @default(now())
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@index([email])
+}
+
+model ResetPasswordToken {
+  userId Int @id
+  tokenHash String @unique
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AuthIdentity {

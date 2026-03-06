@@ -439,6 +439,27 @@ body.dark-mode .md-line pre {
 .dark-mode .email-display {
   color: #ccc;
 }
+
+/* Dark mode forgot password styles */
+.dark-mode .info-text {
+  color: #ccc;
+}
+
+.dark-mode .external-message {
+  border-color: #28a745;
+  background-color: transparent;
+  color: #4caf50;
+}
+
+.dark-mode .btn-login-blue {
+  background-color: #0d6efd !important;
+  border-color: #0a58ca !important;
+}
+
+.dark-mode .btn-login-blue:hover {
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
 `;
   document.head.appendChild(styleDashboard);
 

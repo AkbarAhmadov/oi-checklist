@@ -590,6 +590,64 @@ h2 {
     font-weight: bold;
 }
 
+.btn-login-blue {
+    width: 100%;
+    padding: 0.4rem 0.8rem;
+    background-color: #007bff;
+    border: 1px solid #0056b3;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.btn-login-blue:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.info-text {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.external-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+    padding: 12px 16px;
+    border: 1px solid #28a745;
+    background-color: transparent;
+    color: #28a745;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.forgot-password-container {
+    margin-top: 100px;
+}
+
+@media (max-width: 768px) {
+    .external-message {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 20px auto;
+        max-width: calc(100vw - 40px);
+    }
+    
+    .forgot-password-container {
+        margin-top: 20px;
+    }
+}
+
 .footer {
     text-align: center;
     margin-top: 20px;
