@@ -14,6 +14,8 @@ document.getElementById('reset-form')
       const password = document.getElementById('password').value;
       const confirmPassword = document.getElementById('confirmPassword').value;
       const messageBox = document.getElementById('message');
+      const submitButton = document.querySelector('button[type="submit"]');
+      const originalButtonText = submitButton.textContent;
 
       // Check if passwords match
       if (password !== confirmPassword) {
@@ -30,6 +32,14 @@ document.getElementById('reset-form')
         messageBox.innerText = 'Password cannot be blank.';
         return;
       }
+      
+      // Start loading animation
+      let dots = 0;
+      submitButton.disabled = true;
+      const loadingInterval = setInterval(() => {
+        dots = (dots % 3) + 1;
+        submitButton.textContent = 'Loading' + '.'.repeat(dots);
+      }, 500);
 
       try {
         const res = await fetch(apiUrl + '/auth/forgot/confirm', {
@@ -63,5 +73,10 @@ document.getElementById('reset-form')
         messageBox.style.display = 'block';
         messageBox.style.color = '#dc3545'; // Red color for error
         messageBox.innerText = 'An unexpected error occurred. Please try again.';
+      } finally {
+        // Stop loading animation and restore button
+        clearInterval(loadingInterval);
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
       }
     });
