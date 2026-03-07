@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
   <title>Virtual Contest Details - OI Checklist</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="images/favicon.png">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/style_vc.css">
-  <link rel="stylesheet" href="css/style_vc_graph.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style_vc.css" />
+  <link rel="stylesheet" href="css/style_vc_graph.css" />
   <script src="js/init_darkmode.js"></script>
 </head>
 
@@ -21,7 +21,7 @@
         <a href="#" class="logout-button" id="logout-button">Logout</a>
         <div class="dark-mode-toggle">
           <label class="switch">
-            <input type="checkbox" id="dark-mode-switch">
+            <input type="checkbox" id="dark-mode-switch" />
             <span class="slider round"></span>
           </label>
         </div>
@@ -41,20 +41,16 @@
       </a>
     </div>
 
-    <div class="vc-detail-content" id="vc-detail-content">
-      <!-- Contest details will be populated here -->
-    </div>
+    <div class="vc-detail-content" id="vc-detail-content"></div>
 
-    <!-- User Context Section - appears as part of page flow -->
-    <div class="user-context-section" id="user-context-section" style="display: none;">
+    <div class="user-context-section" id="user-context-section" style="display: none">
       <h3>Additional Details Needed</h3>
       <div class="user-context-description" id="user-context-description">
-        This contest requires some additional information since cutoffs differ by category.
+        This contest requires some additional information since cutoffs differ
+        by category.
       </div>
-      <div class="user-context-form" id="user-context-form">
-        <!-- Form fields will be populated here -->
-      </div>
-      <div class="user-context-error" id="user-context-error" style="display: none; color: red; margin-bottom: 15px;">
+      <div class="user-context-form" id="user-context-form"></div>
+      <div class="user-context-error" id="user-context-error" style="display: none; color: red; margin-bottom: 15px">
         Please fill all fields.
       </div>
       <div class="user-context-actions">
@@ -74,13 +70,15 @@
       </div>
     </div>
 
-    <div class="vc-detail-error" id="vc-detail-error" style="display: none;">
-      <div class="error-text">Contest not found or error loading details.</div>
+    <div class="vc-detail-error" id="vc-detail-error" style="display: none">
+      <div class="error-text">
+        Contest not found or error loading details.
+      </div>
     </div>
   </div>
 
-  <script src='js/utils.js'></script>
-  <script src='js/virtual-contest-detail.js'></script>
+  <script src="js/utils.js"></script>
+  <script src="js/virtual-contest-detail.js"></script>
 </body>
 
 </html>

@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 
 <head>
   <title>Email</title>
-  <base href="/">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="images/favicon.png">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/style_settings.css">
+  <base href="/" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style_settings.css" />
   <script src="js/init_darkmode.js"></script>
 </head>
 
@@ -28,7 +28,7 @@
         <a href="#" class="logout-button" id="logout-button">Logout</a>
         <div class="dark-mode-toggle">
           <label class="switch">
-            <input type="checkbox" id="dark-mode-switch">
+            <input type="checkbox" id="dark-mode-switch" />
             <span class="slider round"></span>
           </label>
         </div>
@@ -39,20 +39,23 @@
   <div class="general-page">
     <div class="settings-section-new">
       <h2 class="settings-section-title-new">Email</h2>
-      
-      <div id="current-email-section" class="settings-item-new" style="display: none;">
+
+      <div id="current-email-section" class="settings-item-new" style="display: none">
         <div class="settings-item-info-new">
           <h3 class="settings-item-title-new">Current Email</h3>
           <p class="settings-item-description-new">
-            Connected: <span id="current-email-display" class="email-display"></span>
+            Connected:
+            <span id="current-email-display" class="email-display"></span>
           </p>
         </div>
         <div class="settings-control-new">
-          <button id="unlink-email-button" class="settings-button-new">Unlink</button>
+          <button id="unlink-email-button" class="settings-button-new">
+            Unlink
+          </button>
         </div>
       </div>
 
-      <div id="email-form-section" class="settings-item-new" style="display: none;">
+      <div id="email-form-section" class="settings-item-new" style="display: none">
         <div class="settings-item-info-new">
           <h3 class="settings-item-title-new">Email Address</h3>
           <p class="settings-item-description-new">
@@ -61,12 +64,14 @@
         </div>
         <div class="settings-control-new">
           <div class="email-form">
-            <input type="email" id="email-input" class="vc-input" placeholder="Enter your email address" required>
-            <button id="connect-email-button" class="settings-button-new">Send Verification</button>
+            <input type="email" id="email-input" class="vc-input" placeholder="Enter your email address" required />
+            <button id="connect-email-button" class="settings-button-new">
+              Send Verification
+            </button>
           </div>
         </div>
       </div>
-      
+
       <div id="loading-section" class="settings-item-new">
         <div class="settings-item-info-new">
           <h3 class="settings-item-title-new">Email</h3>
@@ -74,15 +79,19 @@
             Loading.
           </p>
         </div>
-        <div class="settings-control-new">
-        </div>
+        <div class="settings-control-new"></div>
       </div>
-      
+
       <div id="email-status" class="email-status hidden"></div>
     </div>
 
     <div class="settings-section-new">
-      <div style="width:100%;display:flex;justify-content:center;margin:2rem 0;">
+      <div style="
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+          ">
         <a href="settings" class="settings-button-new">Back to Settings</a>
       </div>
     </div>

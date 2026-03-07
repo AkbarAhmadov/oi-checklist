@@ -1,57 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/init_darkmode.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/init_darkmode.js"></script>
 </head>
 
 <body>
-    <div class="login-container">
-        <h2>Login</h2>
+  <div class="login-container">
+    <h2>Login</h2>
 
-        <button id="github-continue" class="btn-github">
-            <img src="images/github-logo.png" alt="GitHub" class="github-logo" />
-            Continue with GitHub
-        </button>
+    <button id="github-continue" class="btn-github">
+      <img src="images/github-logo.png" alt="GitHub" class="github-logo" />
+      Continue with GitHub
+    </button>
 
-        <button id="google-continue" class="btn-google">
-            <img src="images/google-logo.svg" alt="Google" class="google-logo" />
-            Continue with Google
-        </button>
+    <button id="google-continue" class="btn-google">
+      <img src="images/google-logo.svg" alt="Google" class="google-logo" />
+      Continue with Google
+    </button>
 
-        <button id="discord-continue" class="btn-discord">
-            <img src="images/discord-logo.jpg" alt="Discord" class="discord-logo" />
-            Continue with Discord
-        </button>
+    <button id="discord-continue" class="btn-discord">
+      <img src="images/discord-logo.jpg" alt="Discord" class="discord-logo" />
+      Continue with Discord
+    </button>
 
-        <div class="separator">
-            <span>or</span>
-        </div>
-
-        <form id="login-form" action="/login" method="POST">
-            <div class="form-field">
-                <input type="text" id="username" name="username" class="input-field" placeholder="Username" required>
-            </div>
-            <div class="form-field">
-                <input type="password" id="password" name="password" class="input-field" placeholder="Password"
-                    required>
-            </div>
-            <div id="error-message" class="error-message"></div>
-            <button type="submit" class="btn-login">Login</button>
-        </form>
-        <div class="footer">
-            <p>Don't have an account? <a href="register">Sign up</a></p>
-            <p><a href="forgot-password">Forgot your password?</a></p>
-        </div>
+    <div class="separator">
+      <span>or</span>
     </div>
 
-    <script src='js/utils.js'></script>
-    <script src='js/login.js'></script>
+    <form id="login-form" action="/login" method="POST">
+      <div class="form-field">
+        <input type="text" id="username" name="username" class="input-field" placeholder="Username" required />
+      </div>
+      <div class="form-field">
+        <input type="password" id="password" name="password" class="input-field" placeholder="Password" required />
+      </div>
+      <div id="error-message" class="error-message"></div>
+      <button type="submit" class="btn-login">Login</button>
+    </form>
+    <div class="footer">
+      <p>Don't have an account? <a href="register">Sign up</a></p>
+      <p><a href="forgot-password">Forgot your password?</a></p>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/login.js"></script>
 </body>
 
 </html>
