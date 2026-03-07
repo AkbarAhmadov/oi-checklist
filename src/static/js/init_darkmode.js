@@ -1,7 +1,22 @@
 function darkModeCss() {
-  let green, yellow, red, white, bg, year, yearText, link, greyCell, vcInput, vcDarker, vcStart, vcOtherGrey, bronze, silver, gold;
-  const theme = localStorage.getItem('theme');
-  if (theme == 'darkClassic') {
+  let green,
+    yellow,
+    red,
+    white,
+    bg,
+    year,
+    yearText,
+    link,
+    greyCell,
+    vcInput,
+    vcDarker,
+    vcStart,
+    vcOtherGrey,
+    bronze,
+    silver,
+    gold;
+  const theme2 = localStorage.getItem('theme');
+  if (theme2 == 'darkClassic') {
     green = '#64cd69';
     yellow = '#e6b800';
     red = '#f44336';
@@ -35,10 +50,8 @@ function darkModeCss() {
     bronze = '#1d1610';
     gold = '#1d1a11';
   }
-
   const styleDashboard = document.createElement('style');
-  styleDashboard.textContent =
-    `
+  styleDashboard.textContent = `
 .dark-mode {
   background-color: ${bg};
   color: #ffffff
@@ -462,10 +475,8 @@ body.dark-mode .md-line pre {
 }
 `;
   document.head.appendChild(styleDashboard);
-
   const styleSettings = document.createElement('style');
-  styleSettings.textContent =
-    `
+  styleSettings.textContent = `
 .dark-mode #platform-pref .settings-item-title-new {
   color: #fff;
 }
@@ -508,10 +519,8 @@ body.dark-mode .md-line pre {
 }
 `;
   document.head.appendChild(styleSettings);
-
   const styleVc = document.createElement('style');
-  styleVc.textContent =
-    `
+  styleVc.textContent = `
 .dark-mode .vc-select,
 .dark-mode .vc-input,
 .dark-mode .score-input-field {
@@ -589,7 +598,6 @@ body.dark-mode .md-line pre {
 `;
   document.head.appendChild(styleVc);
 }
-
 let theme = localStorage.getItem('theme');
 if (theme == null || theme == 'light-mode') {
   theme = 'lightClassic';
@@ -598,7 +606,6 @@ if (theme == 'dark-mode') {
   theme = 'darkClassic';
 }
 localStorage.setItem('theme', theme);
-
 if (theme != 'lightClassic') {
   document.documentElement.classList.add('dark-mode');
   darkModeCss();

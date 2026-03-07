@@ -2,19 +2,18 @@ window.onload = async () => {
   check_session();
   const username = localStorage.getItem('username');
   window.currentUsername = username;
-  document.getElementById('welcome-message').textContent = `Welcome, ${username}`;
+  document.getElementById('welcome-message').textContent =
+    `Welcome, ${username}`;
 };
-
 document.addEventListener('DOMContentLoaded', function () {
   const connectButtons = document.querySelectorAll('.connect-button');
-  connectButtons.forEach(button => {
+  connectButtons.forEach((button) => {
     const card = button.closest('.connection-card');
     const rawName =
-      (card?.dataset?.provider) ||
-      (card?.querySelector('.connection-name')?.textContent) ||
+      card?.dataset?.provider ||
+      card?.querySelector('.connection-name')?.textContent ||
       '';
     const providerName = rawName.trim().toLowerCase();
-
     if (providerName === 'github') {
       button.addEventListener('click', () => handleGithubClick());
     } else if (providerName === 'oj.uz') {
@@ -29,42 +28,40 @@ document.addEventListener('DOMContentLoaded', function () {
       button.addEventListener('click', () => showCodechefPopup());
     }
   });
-
-  document.getElementById('submit-cookie-button')
+  document
+    .getElementById('submit-cookie-button')
     ?.addEventListener('click', onSubmitOjuzCookie);
 });
-
 function closeProviderPopup() {
   const popup = document.getElementById('provider-popup');
   popup.classList.remove('active');
-  popup.addEventListener('transitionend', function () {
-    if (!popup.classList.contains('active')) {
-      popup.style.display = 'none';
-    }
-  }, { once: true });
+  popup.addEventListener(
+    'transitionend',
+    function () {
+      if (!popup.classList.contains('active')) {
+        popup.style.display = 'none';
+      }
+    },
+    { once: true },
+  );
 }
-
 function showProviderPopup(title, contentHTML) {
   const popup = document.getElementById('provider-popup');
   const body = document.getElementById('provider-popup-body');
   const titleElem = document.getElementById('popup-title');
-
   titleElem.textContent = title;
   body.innerHTML = contentHTML;
-
   popup.style.display = 'flex';
   setTimeout(() => popup.classList.add('active'), 10);
 }
-
-// Fetch user settings helper for username
 async function fetchUserSettings() {
   try {
     const res = await fetch(`${apiUrl}/user/settings`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: localStorage.getItem('sessionToken') })
+      body: JSON.stringify({ token: localStorage.getItem('sessionToken') }),
     });
     if (!res.ok) {
       return null;
@@ -75,9 +72,10 @@ async function fetchUserSettings() {
     return null;
   }
 }
-
 function showOjuzPopup() {
-  showProviderPopup('Connect to oj.uz', `
+  showProviderPopup(
+    'Connect to oj.uz',
+    `
       <div class="tab-switcher">
         <button id="ojuz-tab-cookie" class="tab active">Link via cookie</button>
         <button id="ojuz-tab-username" class="tab">Username only</button>
@@ -112,13 +110,12 @@ function showOjuzPopup() {
         <div id="popup-message-username" class="popup-inline-message"></div>
         <button class="primary-button" id="submit-ojuz-username-button">Submit</button>
       </div>
-    `);
-
+    `,
+  );
   const tabCookie = document.getElementById('ojuz-tab-cookie');
   const tabUsername = document.getElementById('ojuz-tab-username');
   const paneCookie = document.getElementById('ojuz-cookie-pane');
   const paneUsername = document.getElementById('ojuz-username-pane');
-
   function activate(tab) {
     if (tab === 'cookie') {
       tabCookie.classList.add('active');
@@ -132,23 +129,23 @@ function showOjuzPopup() {
       paneCookie.style.display = 'none';
     }
   }
-
   tabCookie.addEventListener('click', () => activate('cookie'));
   tabUsername.addEventListener('click', () => activate('username'));
-
-  document.getElementById('submit-cookie-button')
+  document
+    .getElementById('submit-cookie-button')
     .addEventListener('click', onSubmitOjuzCookie);
-
-  document.getElementById('submit-ojuz-username-button')
+  document
+    .getElementById('submit-ojuz-username-button')
     .addEventListener('click', onSubmitOjuzUsername);
-
-  // Load and display any saved oj.uz username for the current user
   (async () => {
     try {
       const uname = window.currentUsername;
       if (!uname) return;
       const settings = await fetchUserSettings();
-      const existing = settings && settings.platformUsernames && settings.platformUsernames['oj.uz'];
+      const existing =
+        settings &&
+        settings.platformUsernames &&
+        settings.platformUsernames['oj.uz'];
       const input = document.getElementById('ojuz-username');
       const note = document.getElementById('ojuz-username-note');
       if (existing) {
@@ -162,15 +159,12 @@ function showOjuzPopup() {
     }
   })();
 }
-
 async function handleGithubClick() {
   const token = localStorage.getItem('sessionToken');
   if (!token) {
     showGithubError('You are not logged in.');
     return;
   }
-
-  // Immediately show popup with loading spinner
   showProviderPopup(
     'GitHub Connection',
     `
@@ -184,14 +178,12 @@ async function handleGithubClick() {
     </p>
     <div id="popup-message"></div>
     <button class="primary-button" id="unlink-github-button">Unlink</button>
-  `
+  `,
   );
-
   try {
     const res = await fetch(`${apiUrl}/auth/github/status`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
-
     if (res.status === 200) {
       const { username } = await res.json();
       const linkEl = document.getElementById('github-link');
@@ -200,7 +192,6 @@ async function handleGithubClick() {
         linkEl.href = `https://github.com/${username}`;
         placeholderEl.textContent = `@${username}`;
       }
-
       document.getElementById('unlink-github-button').onclick = async () => {
         const messageBox = document.getElementById('popup-message');
         messageBox.style.display = 'block';
@@ -208,16 +199,14 @@ async function handleGithubClick() {
           const unlinkRes = await fetch(`${apiUrl}/auth/github/unlink`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
+            body: JSON.stringify({ token }),
           });
-
           const resBody = await unlinkRes.json();
-
           if (unlinkRes.ok) {
             messageBox.textContent =
               resBody.message || 'GitHub unlinked successfully.';
             messageBox.style.color = 'green';
-            setTimeout(closeProviderPopup, 1000);
+            setTimeout(closeProviderPopup, 1e3);
           } else {
             messageBox.textContent =
               resBody.error || 'Failed to unlink GitHub.';
@@ -236,9 +225,8 @@ async function handleGithubClick() {
         <p>You have not linked your GitHub account yet.</p>
         <div id="popup-message"></div>
         <button class="primary-button" id="link-github-button">Link GitHub</button>
-      `
+      `,
       );
-
       document.getElementById('link-github-button').onclick = () => {
         const state = crypto.randomUUID();
         localStorage.setItem('oauth_github_state', state);
@@ -256,14 +244,12 @@ async function handleGithubClick() {
     showGithubError('Error checking GitHub status.');
   }
 }
-
 async function handleDiscordClick() {
   const token = localStorage.getItem('sessionToken');
   if (!token) {
     showDiscordError('You are not logged in.');
     return;
   }
-
   showProviderPopup(
     'Discord Connection',
     `
@@ -277,23 +263,21 @@ async function handleDiscordClick() {
     </p>
     <div id="popup-message"></div>
     <button class="primary-button" id="unlink-discord-button">Unlink</button>
-  `
+  `,
   );
-
   try {
     const res = await fetch(`${apiUrl}/auth/discord/status`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
-
     if (res.status === 200) {
       const { username, providerUserId } = await res.json();
       const linkEl = document.getElementById('discord-link');
       const placeholderEl = document.getElementById('discord-placeholder');
       if (linkEl && placeholderEl) {
-        if (providerUserId) linkEl.href = `https://discord.com/users/${providerUserId}`;
+        if (providerUserId)
+          linkEl.href = `https://discord.com/users/${providerUserId}`;
         placeholderEl.textContent = username || 'Linked';
       }
-
       document.getElementById('unlink-discord-button').onclick = async () => {
         const messageBox = document.getElementById('popup-message');
         messageBox.style.display = 'block';
@@ -301,24 +285,24 @@ async function handleDiscordClick() {
           const unlinkRes = await fetch(`${apiUrl}/auth/discord/unlink`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
+            body: JSON.stringify({ token }),
           });
-
           const resBody = await unlinkRes.json();
-
           if (unlinkRes.ok) {
-            messageBox.textContent = resBody.message || 'Discord unlinked successfully.';
+            messageBox.textContent =
+              resBody.message || 'Discord unlinked successfully.';
             messageBox.style.color = 'green';
-            setTimeout(closeProviderPopup, 1000);
+            setTimeout(closeProviderPopup, 1e3);
           } else {
-            messageBox.textContent = resBody.error || 'Failed to unlink Discord.';
+            messageBox.textContent =
+              resBody.error || 'Failed to unlink Discord.';
             messageBox.style.color = 'red';
           }
         } catch (err) {
           console.error(err);
-          const messageBox = document.getElementById('popup-message');
-          messageBox.textContent = 'Unexpected error occurred.';
-          messageBox.style.color = 'red';
+          const messageBox2 = document.getElementById('popup-message');
+          messageBox2.textContent = 'Unexpected error occurred.';
+          messageBox2.style.color = 'red';
         }
       };
     } else {
@@ -328,9 +312,8 @@ async function handleDiscordClick() {
         <p>You have not linked your Discord account yet.</p>
         <div id="popup-message"></div>
         <button class="primary-button" id="link-discord-button">Link Discord</button>
-      `
+      `,
       );
-
       document.getElementById('link-discord-button').onclick = () => {
         const state = crypto.randomUUID();
         localStorage.setItem('oauth_discord_state', state);
@@ -348,15 +331,12 @@ async function handleDiscordClick() {
     showDiscordError('Error checking Discord status.');
   }
 }
-
 async function handleGoogleClick() {
   const token = localStorage.getItem('sessionToken');
   if (!token) {
     showGoogleError('You are not logged in.');
     return;
   }
-
-  // Immediately show popup with loading spinner
   showProviderPopup(
     'Google Connection',
     `
@@ -368,21 +348,18 @@ async function handleGoogleClick() {
     </p>
     <div id="popup-message"></div>
     <button class="primary-button" id="unlink-google-button">Unlink</button>
-  `
+  `,
   );
-
   try {
     const res = await fetch(`${apiUrl}/auth/google/status`, {
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
-
     if (res.status === 200) {
       const { username } = await res.json();
       const placeholderEl = document.getElementById('google-placeholder');
       if (placeholderEl) {
         placeholderEl.textContent = username ? `${username}` : 'Linked';
       }
-
       document.getElementById('unlink-google-button').onclick = async () => {
         const messageBox = document.getElementById('popup-message');
         messageBox.style.display = 'block';
@@ -390,16 +367,14 @@ async function handleGoogleClick() {
           const unlinkRes = await fetch(`${apiUrl}/auth/google/unlink`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token })
+            body: JSON.stringify({ token }),
           });
-
           const resBody = await unlinkRes.json();
-
           if (unlinkRes.ok) {
             messageBox.textContent =
               resBody.message || 'Google unlinked successfully.';
             messageBox.style.color = 'green';
-            setTimeout(closeProviderPopup, 1000);
+            setTimeout(closeProviderPopup, 1e3);
           } else {
             messageBox.textContent =
               resBody.error || 'Failed to unlink Google.';
@@ -407,22 +382,20 @@ async function handleGoogleClick() {
           }
         } catch (err) {
           console.error(err);
-          const messageBox = document.getElementById('popup-message');
-          messageBox.textContent = 'Unexpected error occurred.';
-          messageBox.style.color = 'red';
+          const messageBox2 = document.getElementById('popup-message');
+          messageBox2.textContent = 'Unexpected error occurred.';
+          messageBox2.style.color = 'red';
         }
       };
     } else {
-      // Not linked yet — show link button
       showProviderPopup(
         'Link Google',
         `
         <p>You have not linked your Google account yet.</p>
         <div id="popup-message"></div>
         <button class="primary-button" id="link-google-button">Link Google</button>
-      `
+      `,
       );
-
       document.getElementById('link-google-button').onclick = () => {
         const state = crypto.randomUUID();
         localStorage.setItem('oauth_google_state', state);
@@ -440,7 +413,6 @@ async function handleGoogleClick() {
     showGoogleError('Error checking Google status.');
   }
 }
-
 function showGithubError(message) {
   const messageBox = document.getElementById('popup-message');
   if (!messageBox) return;
@@ -448,7 +420,6 @@ function showGithubError(message) {
   messageBox.textContent = `Error: ${message}`;
   messageBox.style.color = 'red';
 }
-
 function showDiscordError(message) {
   const messageBox = document.getElementById('popup-message');
   if (!messageBox) return;
@@ -456,78 +427,69 @@ function showDiscordError(message) {
   messageBox.textContent = `Error: ${message}`;
   messageBox.style.color = 'red';
 }
-
 function showGoogleError(message) {
   const messageBox = document.getElementById('popup-message');
   if (!messageBox) return;
   messageBox.style.display = 'block';
   messageBox.textContent = message;
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ?
-      'black' :
-      'white';
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic'
+      ? 'black'
+      : 'white';
 }
-
 async function onSubmitOjuzCookie(e) {
   e.preventDefault();
-
   const oidcAuth = document.getElementById('oidc-input').value.trim();
   const messageBox = document.getElementById('popup-message-cookie');
   messageBox.style.display = 'block';
   messageBox.textContent = 'Validating cookie...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ?
-      'black' :
-      'white';
-
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic'
+      ? 'black'
+      : 'white';
   if (!oidcAuth) {
     messageBox.textContent = 'Please paste your oidc-auth cookie value.';
     messageBox.style.color = 'red';
     return;
   }
-
   const sessionToken = localStorage.getItem('sessionToken');
   if (!sessionToken) {
     messageBox.textContent = 'You are not logged in.';
     messageBox.style.color = 'red';
     return;
   }
-
   try {
     const verifyRes = await fetch(`${apiUrl}/user/link/ojuz/verify`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: sessionToken, cookie: oidcAuth })
+      body: JSON.stringify({ token: sessionToken, cookie: oidcAuth }),
     });
-
     if (!verifyRes.ok) {
       const text = await verifyRes.text();
       messageBox.textContent = `Cookie validation failed: ${text}`;
       messageBox.style.color = 'red';
       return;
     }
-
     const verifyResult = await verifyRes.json();
     if (verifyResult.valid) {
       messageBox.textContent = `Cookie is valid. Username: ${verifyResult.username}. Your problems will be updated shortly.`;
       messageBox.style.color = 'green';
-
       fetch(`${apiUrl}/user/link/ojuz/update`, {
         method: 'POST',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token: sessionToken, cookie: oidcAuth })
+        body: JSON.stringify({ token: sessionToken, cookie: oidcAuth }),
       })
-        .then(res => res.json())
-        .then(result => {
+        .then((res) => res.json())
+        .then((result) => {
           console.log('Problems updated in the background.');
         })
-        .catch(err => {
+        .catch((err) => {
           console.error('Error updating problems in the background:', err);
         });
     } else {
@@ -541,8 +503,6 @@ async function onSubmitOjuzCookie(e) {
     messageBox.style.color = 'red';
   }
 }
-
-// Handler for saving oj.uz username only (merge-based update)
 async function onSubmitOjuzUsername(e) {
   e.preventDefault();
   const username = document.getElementById('ojuz-username').value.trim();
@@ -550,41 +510,38 @@ async function onSubmitOjuzUsername(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Saving username...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ?
-      'black' :
-      'white';
-
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic'
+      ? 'black'
+      : 'white';
   if (!username) {
     messageBox.textContent = 'Please enter your oj.uz username.';
     messageBox.style.color = 'red';
     return;
   }
-
   const sessionToken = localStorage.getItem('sessionToken');
   if (!sessionToken) {
     messageBox.textContent = 'You are not logged in.';
     messageBox.style.color = 'red';
     return;
   }
-
   try {
     const res = await fetch(`${apiUrl}/user/settings`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        token: sessionToken, updated: { platformUsernames: { 'oj.uz': username } }
-      })
+        token: sessionToken,
+        updated: { platformUsernames: { 'oj.uz': username } },
+      }),
     });
-
     const body = await res.json();
     if (!res.ok || body.success !== true) {
-      messageBox.textContent = (body && (body.error || body.message)) || 'Failed to save username.';
+      messageBox.textContent =
+        (body && (body.error || body.message)) || 'Failed to save username.';
       messageBox.style.color = 'red';
       return;
     }
-
     messageBox.textContent = 'oj.uz username saved.';
     messageBox.style.color = 'green';
     setTimeout(closeProviderPopup, 800);
@@ -594,10 +551,10 @@ async function onSubmitOjuzUsername(e) {
     messageBox.style.color = 'red';
   }
 }
-
-// QOJ connection popup and handlers
 function showQojPopup() {
-  showProviderPopup('Connect to qoj.ac', `
+  showProviderPopup(
+    'Connect to qoj.ac',
+    `
       <div class="tab-switcher">
         <button id="qoj-tab-cookie" class="tab active">Link via cookie</button>
         <button id="qoj-tab-username" class="tab">Username only</button>
@@ -632,13 +589,12 @@ function showQojPopup() {
         <div id="popup-message-qoj-username" class="popup-inline-message"></div>
         <button class="primary-button" id="submit-qoj-username-button">Submit</button>
       </div>
-    `);
-
+    `,
+  );
   const tabCookie = document.getElementById('qoj-tab-cookie');
   const tabUsername = document.getElementById('qoj-tab-username');
   const paneCookie = document.getElementById('qoj-cookie-pane');
   const paneUsername = document.getElementById('qoj-username-pane');
-
   function activate(tab) {
     if (tab === 'cookie') {
       tabCookie.classList.add('active');
@@ -652,23 +608,23 @@ function showQojPopup() {
       paneCookie.style.display = 'none';
     }
   }
-
   tabCookie.addEventListener('click', () => activate('cookie'));
   tabUsername.addEventListener('click', () => activate('username'));
-
-  document.getElementById('submit-qoj-cookie-button')
+  document
+    .getElementById('submit-qoj-cookie-button')
     .addEventListener('click', onSubmitQojCookie);
-
-  document.getElementById('submit-qoj-username-button')
+  document
+    .getElementById('submit-qoj-username-button')
     .addEventListener('click', onSubmitQojUsername);
-
-  // Load and display any saved QOJ username for the current user
   (async () => {
     try {
       const uname = window.currentUsername;
       if (!uname) return;
       const settings = await fetchUserSettings();
-      const existing = settings && settings.platformUsernames && settings.platformUsernames['qoj.ac'];
+      const existing =
+        settings &&
+        settings.platformUsernames &&
+        settings.platformUsernames['qoj.ac'];
       const input = document.getElementById('qoj-username');
       const note = document.getElementById('qoj-username-note');
       if (existing) {
@@ -682,61 +638,55 @@ function showQojPopup() {
     }
   })();
 }
-
 async function onSubmitQojCookie(e) {
   e.preventDefault();
-
   const cookieVal = document.getElementById('qoj-cookie-input').value.trim();
   const messageBox = document.getElementById('popup-message-qoj-cookie');
   messageBox.style.display = 'block';
   messageBox.textContent = 'Validating cookie...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
-
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic'
+      ? 'black'
+      : 'white';
   if (!cookieVal) {
     messageBox.textContent = 'Please paste your qoj.ac session cookie value.';
     messageBox.style.color = 'red';
     return;
   }
-
   const sessionToken = localStorage.getItem('sessionToken');
   if (!sessionToken) {
     messageBox.textContent = 'You are not logged in.';
     messageBox.style.color = 'red';
     return;
   }
-
   try {
     const verifyRes = await fetch(`${apiUrl}/user/link/qoj/verify`, {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json', },
-      body: JSON.stringify({ token: sessionToken, cookie: cookieVal })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: sessionToken, cookie: cookieVal }),
     });
-
     if (!verifyRes.ok) {
       const text = await verifyRes.text();
       messageBox.textContent = `Cookie validation failed: ${text}`;
       messageBox.style.color = 'red';
       return;
     }
-
     const verifyResult = await verifyRes.json();
     if (verifyResult.valid) {
       messageBox.textContent = `Cookie is valid. Username: ${verifyResult.username}. Your problems will be updated shortly.`;
       messageBox.style.color = 'green';
-
       fetch(`${apiUrl}/user/link/qoj/update`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: sessionToken, cookie: cookieVal })
+        body: JSON.stringify({ token: sessionToken, cookie: cookieVal }),
       })
-        .then(res => res.json())
+        .then((res) => res.json())
         .then(() => {
           console.log('QOJ problems update triggered.');
         })
-        .catch(err => {
+        .catch((err) => {
           console.error('Error updating QOJ problems:', err);
         });
     } else {
@@ -745,11 +695,11 @@ async function onSubmitQojCookie(e) {
     }
   } catch (err) {
     console.error(err);
-    messageBox.textContent = 'Something went wrong while validating the cookie.';
+    messageBox.textContent =
+      'Something went wrong while validating the cookie.';
     messageBox.style.color = 'red';
   }
 }
-
 async function onSubmitQojUsername(e) {
   e.preventDefault();
   const username = document.getElementById('qoj-username').value.trim();
@@ -757,37 +707,38 @@ async function onSubmitQojUsername(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Saving username...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
-
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic'
+      ? 'black'
+      : 'white';
   if (!username) {
     messageBox.textContent = 'Please enter your qoj.ac username.';
     messageBox.style.color = 'red';
     return;
   }
-
   const sessionToken = localStorage.getItem('sessionToken');
   if (!sessionToken) {
     messageBox.textContent = 'You are not logged in.';
     messageBox.style.color = 'red';
     return;
   }
-
   try {
     const res = await fetch(`${apiUrl}/user/settings`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: sessionToken, updated: { platformUsernames: { 'qoj.ac': username } } })
+      body: JSON.stringify({
+        token: sessionToken,
+        updated: { platformUsernames: { 'qoj.ac': username } },
+      }),
     });
-
     const body = await res.json();
     if (!res.ok || body.success !== true) {
-      messageBox.textContent = (body && (body.error || body.message)) || 'Failed to save username.';
+      messageBox.textContent =
+        (body && (body.error || body.message)) || 'Failed to save username.';
       messageBox.style.color = 'red';
       return;
     }
-
     messageBox.textContent = 'qoj.ac username saved.';
     messageBox.style.color = 'green';
     setTimeout(closeProviderPopup, 800);
@@ -797,10 +748,10 @@ async function onSubmitQojUsername(e) {
     messageBox.style.color = 'red';
   }
 }
-
-// Codechef connection popup and handlers
 function showCodechefPopup() {
-  showProviderPopup('Connect to Codechef', `
+  showProviderPopup(
+    'Connect to Codechef',
+    `
       <div class="tab-switcher">
         <button id="codechef-tab-cookie" class="tab active">Link via cookie</button>
         <button id="codechef-tab-username" class="tab">Username only</button>
@@ -835,13 +786,12 @@ function showCodechefPopup() {
         <div id="popup-message-codechef-username" class="popup-inline-message"></div>
         <button class="primary-button" id="submit-codechef-username-button">Submit</button>
       </div>
-    `);
-
+    `,
+  );
   const tabCookie = document.getElementById('codechef-tab-cookie');
   const tabUsername = document.getElementById('codechef-tab-username');
   const paneCookie = document.getElementById('codechef-cookie-pane');
   const paneUsername = document.getElementById('codechef-username-pane');
-
   function activate(tab) {
     if (tab === 'cookie') {
       tabCookie.classList.add('active');
@@ -855,23 +805,23 @@ function showCodechefPopup() {
       paneCookie.style.display = 'none';
     }
   }
-
   tabCookie.addEventListener('click', () => activate('cookie'));
   tabUsername.addEventListener('click', () => activate('username'));
-
-  document.getElementById('submit-codechef-cookie-button')
+  document
+    .getElementById('submit-codechef-cookie-button')
     .addEventListener('click', onSubmitCodechefCookie);
-
-  document.getElementById('submit-codechef-username-button')
+  document
+    .getElementById('submit-codechef-username-button')
     .addEventListener('click', onSubmitCodechefUsername);
-
-  // Load and display any saved Codechef username for the current user
   (async () => {
     try {
       const uname = window.currentUsername;
       if (!uname) return;
       const settings = await fetchUserSettings();
-      const existing = settings && settings.platformUsernames && settings.platformUsernames['codechef'];
+      const existing =
+        settings &&
+        settings.platformUsernames &&
+        settings.platformUsernames['codechef'];
       const input = document.getElementById('codechef-username');
       const note = document.getElementById('codechef-username-note');
       if (existing) {
@@ -885,61 +835,57 @@ function showCodechefPopup() {
     }
   })();
 }
-
 async function onSubmitCodechefCookie(e) {
   e.preventDefault();
-
-  const cookieVal = document.getElementById('codechef-cookie-input').value.trim();
+  const cookieVal = document
+    .getElementById('codechef-cookie-input')
+    .value.trim();
   const messageBox = document.getElementById('popup-message-codechef-cookie');
   messageBox.style.display = 'block';
   messageBox.textContent = 'Validating cookie...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
-
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic'
+      ? 'black'
+      : 'white';
   if (!cookieVal) {
     messageBox.textContent = 'Please paste your Codechef session cookie value.';
     messageBox.style.color = 'red';
     return;
   }
-
   const sessionToken = localStorage.getItem('sessionToken');
   if (!sessionToken) {
     messageBox.textContent = 'You are not logged in.';
     messageBox.style.color = 'red';
     return;
   }
-
   try {
     const verifyRes = await fetch(`${apiUrl}/user/link/codechef/verify`, {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json', },
-      body: JSON.stringify({ token: sessionToken, cookie: cookieVal })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: sessionToken, cookie: cookieVal }),
     });
-
     if (!verifyRes.ok) {
       const text = await verifyRes.text();
       messageBox.textContent = `Cookie validation failed: ${text}`;
       messageBox.style.color = 'red';
       return;
     }
-
     const verifyResult = await verifyRes.json();
     if (verifyResult.valid) {
       messageBox.textContent = `Cookie is valid. Username: ${verifyResult.username}. Your problems will be updated shortly.`;
       messageBox.style.color = 'green';
-
       fetch(`${apiUrl}/user/link/codechef/update`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: sessionToken, cookie: cookieVal })
+        body: JSON.stringify({ token: sessionToken, cookie: cookieVal }),
       })
-        .then(res => res.json())
+        .then((res) => res.json())
         .then(() => {
           console.log('Codechef problems update triggered.');
         })
-        .catch(err => {
+        .catch((err) => {
           console.error('Error updating Codechef problems:', err);
         });
     } else {
@@ -948,11 +894,11 @@ async function onSubmitCodechefCookie(e) {
     }
   } catch (err) {
     console.error(err);
-    messageBox.textContent = 'Something went wrong while validating the cookie.';
+    messageBox.textContent =
+      'Something went wrong while validating the cookie.';
     messageBox.style.color = 'red';
   }
 }
-
 async function onSubmitCodechefUsername(e) {
   e.preventDefault();
   const username = document.getElementById('codechef-username').value.trim();
@@ -960,37 +906,38 @@ async function onSubmitCodechefUsername(e) {
   messageBox.style.display = 'block';
   messageBox.textContent = 'Saving username...';
   messageBox.style.color =
-    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic' ? 'black' : 'white';
-
+    (localStorage.getItem('theme') || 'lightClassic') === 'lightClassic'
+      ? 'black'
+      : 'white';
   if (!username) {
     messageBox.textContent = 'Please enter your Codechef username.';
     messageBox.style.color = 'red';
     return;
   }
-
   const sessionToken = localStorage.getItem('sessionToken');
   if (!sessionToken) {
     messageBox.textContent = 'You are not logged in.';
     messageBox.style.color = 'red';
     return;
   }
-
   try {
     const res = await fetch(`${apiUrl}/user/settings`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token: sessionToken, updated: { platformUsernames: { 'codechef': username } } })
+      body: JSON.stringify({
+        token: sessionToken,
+        updated: { platformUsernames: { codechef: username } },
+      }),
     });
-
     const body = await res.json();
     if (!res.ok || body.success !== true) {
-      messageBox.textContent = (body && (body.error || body.message)) || 'Failed to save username.';
+      messageBox.textContent =
+        (body && (body.error || body.message)) || 'Failed to save username.';
       messageBox.style.color = 'red';
       return;
     }
-
     messageBox.textContent = 'Codechef username saved.';
     messageBox.style.color = 'green';
     setTimeout(closeProviderPopup, 800);
