@@ -1,7 +1,7 @@
 import createError from 'http-errors';
 import crypto from 'crypto';
 import { db } from '@db';
-import { root, RootUrl, GithubClientId, GithubClientSecret } from '@config';
+import { RootUrl, GithubClientId, GithubClientSecret } from '@config';
 import { FastifyInstance } from 'fastify';
 import { User } from '@prisma/client';
 

@@ -123,7 +123,7 @@ Create a `.env` file with the following values:
 | Variable | Description |
 | - | - |
 | `DATABASE_PATH` | The exact path to a `.db` file that we'll make in the next step. You can set this to any path you want; for example; I use `file:/Users/avighna/Desktop/oi-checklist/database.db` |
-| `ROOT_URL` | Set this to `http://localhost:5501/` |
+| `ROOT_URL` | Set this to `http://localhost:5501` |
 | `GITHUB_CLIENT_ID` | Your GitHub client ID |
 | `GITHUB_CLIENT_SECRET` | Your GitHub client secret |
 | `DISCORD_CLIENT_ID` | Your Discord client ID |
@@ -132,6 +132,8 @@ Create a `.env` file with the following values:
 | `GOOGLE_CLIENT_SECRET` | Your Google client secret |
 | `QOJ_USER` | Username for the qoj.ac account used for scraping |
 | `QOJ_PASS` | Password for the same qoj.ac account |
+| `GMAIL_USER` | Email address for a Google account that will be used to send automated emails |
+| `GMAIL_PASS` | App password for that Google account, can be generated after enabling two-factor authentication |
 
 Note that every variable other than the first two isn't strictly required for the app to work. The client IDs and secrets are only needed for OAuth (which you may not need if you're running this locally). The qoj.ac username and password variables are needed for qoj.ac virtual contest scraping (which, again, you may or may not need).
 
@@ -174,6 +176,8 @@ Below is a brief overview of the key endpoints exposed by the backend.
 - `/github`
 - `/discord`
 - `/google`
+- `/mail`
+- `/forgot`
 
 #### prefix: `/data`
 - `/problems`

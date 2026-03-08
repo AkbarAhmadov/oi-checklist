@@ -1,7 +1,22 @@
 function darkModeCss() {
-  let green, yellow, red, white, bg, year, yearText, link, greyCell, vcInput, vcDarker, vcStart, vcOtherGrey, bronze, silver, gold;
-  const theme = localStorage.getItem('theme');
-  if (theme == 'darkClassic') {
+  let green,
+    yellow,
+    red,
+    white,
+    bg,
+    year,
+    yearText,
+    link,
+    greyCell,
+    vcInput,
+    vcDarker,
+    vcStart,
+    vcOtherGrey,
+    bronze,
+    silver,
+    gold;
+  const theme2 = localStorage.getItem('theme');
+  if (theme2 == 'darkClassic') {
     green = '#64cd69';
     yellow = '#e6b800';
     red = '#f44336';
@@ -35,10 +50,8 @@ function darkModeCss() {
     bronze = '#1d1610';
     gold = '#1d1a11';
   }
-
   const styleDashboard = document.createElement('style');
-  styleDashboard.textContent =
-    `
+  styleDashboard.textContent = `
 .dark-mode {
   background-color: ${bg};
   color: #ffffff
@@ -412,12 +425,58 @@ body.dark-mode .md-line pre {
   border-color: #82c6ff;
   box-shadow: 0 0 0 3px rgba(130, 198, 255, .25);
 }
+
+/* Dark mode email connection styles */
+.dark-mode .email-form .vc-input {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #f0f0f0;
+}
+
+.dark-mode .email-form .vc-input:focus {
+  border-color: #82c6ff;
+}
+
+.dark-mode .email-status.success {
+  background-color: #1e3a1e;
+  color: #4caf50;
+  border-color: #2e5a2e;
+}
+
+.dark-mode .email-status.error {
+  background-color: #3a1e1e;
+  color: #f44336;
+  border-color: #5a2e2e;
+}
+
+.dark-mode .email-display {
+  color: #ccc;
+}
+
+/* Dark mode forgot password styles */
+.dark-mode .info-text {
+  color: #ccc;
+}
+
+.dark-mode .external-message {
+  border-color: #28a745;
+  background-color: transparent;
+  color: #4caf50;
+}
+
+.dark-mode .btn-login-blue {
+  background-color: #0d6efd !important;
+  border-color: #0a58ca !important;
+}
+
+.dark-mode .btn-login-blue:hover {
+  background-color: #0b5ed7 !important;
+  border-color: #0a58ca !important;
+}
 `;
   document.head.appendChild(styleDashboard);
-
   const styleSettings = document.createElement('style');
-  styleSettings.textContent =
-    `
+  styleSettings.textContent = `
 .dark-mode #platform-pref .settings-item-title-new {
   color: #fff;
 }
@@ -460,10 +519,8 @@ body.dark-mode .md-line pre {
 }
 `;
   document.head.appendChild(styleSettings);
-
   const styleVc = document.createElement('style');
-  styleVc.textContent =
-    `
+  styleVc.textContent = `
 .dark-mode .vc-select,
 .dark-mode .vc-input,
 .dark-mode .score-input-field {
@@ -541,7 +598,6 @@ body.dark-mode .md-line pre {
 `;
   document.head.appendChild(styleVc);
 }
-
 let theme = localStorage.getItem('theme');
 if (theme == null || theme == 'light-mode') {
   theme = 'lightClassic';
@@ -550,7 +606,6 @@ if (theme == 'dark-mode') {
   theme = 'darkClassic';
 }
 localStorage.setItem('theme', theme);
-
 if (theme != 'lightClassic') {
   document.documentElement.classList.add('dark-mode');
   darkModeCss();

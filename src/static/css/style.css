@@ -590,6 +590,64 @@ h2 {
     font-weight: bold;
 }
 
+.btn-login-blue {
+    width: 100%;
+    padding: 0.4rem 0.8rem;
+    background-color: #007bff;
+    border: 1px solid #0056b3;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.btn-login-blue:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+.info-text {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.external-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+    padding: 12px 16px;
+    border: 1px solid #28a745;
+    background-color: transparent;
+    color: #28a745;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.forgot-password-container {
+    margin-top: 100px;
+}
+
+@media (max-width: 768px) {
+    .external-message {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 20px auto;
+        max-width: calc(100vw - 40px);
+    }
+    
+    .forgot-password-container {
+        margin-top: 20px;
+    }
+}
+
 .footer {
     text-align: center;
     margin-top: 20px;
@@ -1886,4 +1944,65 @@ body,
 .md-textarea:focus {
     border-color: #4ea1f3;
     box-shadow: 0 0 0 3px rgba(78, 161, 243, .25);
+}
+
+/* Email Connection Styles */
+.email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.email-form .vc-input {
+  padding: 1rem 1.25rem;
+  border: 2px solid #ddd;
+  font-size: 1.1rem;
+  width: 100%;
+  min-width: 15rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.email-form .vc-input:focus {
+  border-color: #3399ff;
+  outline: none;
+}
+
+.email-status {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.email-status.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.email-status.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.email-status.hidden {
+  display: none;
+}
+
+.email-display {
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .email-form {
+    max-width: 100%;
+  }
 }

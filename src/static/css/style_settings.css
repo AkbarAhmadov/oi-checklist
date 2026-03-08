@@ -399,6 +399,20 @@
   width: 100%;
 }
 
+/* Settings current email display */
+.settings_current_email {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+/* Dark mode for current email */
+.dark-mode .settings_current_email {
+  color: #ccc;
+}
+
 /* Platform preferences */
 .platform-pref-panel[hidden] {
   display: none;

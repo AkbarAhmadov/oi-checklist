@@ -1,4 +1,5 @@
 import fastify from 'fastify';
+import type { FastifyError } from 'fastify';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import fs from 'fs';
@@ -65,9 +66,7 @@ for (const i of ['js', 'css', 'images']) {
   });
 }
 
-import type { FastifyError } from 'fastify';
-
-app.setErrorHandler((err : FastifyError, req, res) => {
+app.setErrorHandler((err: FastifyError, req, res) => {
   if (err.validation) {
     res.status(400).send({ error: 'Bad request', message: err.message, details: err.validation });
     return;

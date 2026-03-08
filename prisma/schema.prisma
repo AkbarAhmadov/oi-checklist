@@ -11,6 +11,7 @@ model User {
   id Int @id @default(autoincrement())
   username String @unique
   password String?
+  email String? @unique
   createdAt DateTime @default(now())
   authIdentities AuthIdentity[]
   problemsData UserProblemData[]
@@ -18,8 +19,26 @@ model User {
   settings Settings?
   virtualContests UserVirtualContest[]
   activeVirtualContest ActiveVirtualContest?
+  pendingEmail  PendingEmail?
+  resetPasswordToken ResetPasswordToken?
   following Follow[] @relation("UserFollows")
   followers Follow[] @relation("UserFollowedBy")
+}
+
+model PendingEmail {
+  userId Int @id
+  email String
+  tokenHash String @unique
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([email])
+}
+
+model ResetPasswordToken {
+  userId Int @id
+  tokenHash String @unique
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AuthIdentity {
