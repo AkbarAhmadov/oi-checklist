@@ -7,6 +7,7 @@ import createError from 'http-errors';
 import { auth } from './routes/auth';
 import { user } from './routes/user';
 import { data } from './routes/data';
+import { findProblemByPath } from './routes/data/problem';
 import { db } from '@db';
 
 const app = fastify();
@@ -22,12 +23,25 @@ app.register(fastifyStatic, {
 });
 
 fs.readdirSync(path.join(__dirname, `../static/html`)).forEach(i => {
-  if (!i.endsWith('.html') || i == '404.html' || i == 'profile.html') {
+  if (!i.endsWith('.html') || i == '404.html' || i == 'profile.html' || i == 'problem.html') {
     return;
   }
   app.get(`/${i.replace('index.html', '').replace(/\.html$/, '')}`, (_req, res) => {
     return res.sendFile(i, path.join(__dirname, `../static/html`));
   });
+});
+
+app.get('/problem/*', async (req, res) => {
+  const wildcard = (req.params as Record<string, string>)['*'] ?? '';
+  if (wildcard.endsWith('/')) {
+    const pathStr = wildcard.slice(0, -1);
+    const prob = await findProblemByPath(pathStr);
+    if (prob?.problemLinks[0]) {
+      return res.redirect(prob.problemLinks[0].url);
+    }
+    return res.redirect(`/problem/${pathStr}`);
+  }
+  return res.sendFile('problem.html', path.join(__dirname, '../static/html'));
 });
 
 app.get<{ Params: { username: string } }>('/profile/:username', async (req, res) => {
