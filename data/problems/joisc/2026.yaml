@@ -1,36 +1,48 @@
 - name: Legendary Dango Eater
   number: 1
   links:
+  - https://cms.ioi-jp.org/joi2026-sp1-open/tasks/dango/description
 - name: Garden 3
   number: 2
   links:
+  - https://cms.ioi-jp.org/joi2026-sp1-open/tasks/garden/description
 - name: Multi Communication 2
   number: 3
   links:
+  - https://cms.ioi-jp.org/joi2026-sp1-open/tasks/multi/description
 - name: Casino
   number: 4
   links:
+  - https://cms.ioi-jp.org/joi2026-sp2-open/tasks/casino/description
 - name: JOI Tour 2
   number: 5
   links:
+  - https://cms.ioi-jp.org/joi2026-sp2-open/tasks/joitour/description
 - name: Teleporter 2
   number: 6
   links:
+  - https://cms.ioi-jp.org/joi2026-sp2-open/tasks/teleporter/description
 - name: Triangular Rainfall
   number: 7
   links:
+  - https://cms.ioi-jp.org/joi2026-sp3-open/tasks/rainfall/description
 - name: Scarecrows 2
   number: 8
   links:
+  - https://cms.ioi-jp.org/joi2026-sp3-open/tasks/scarecrows/description
 - name: Collecting Stamps 5
   number: 9
   links:
+  - https://cms.ioi-jp.org/joi2026-sp3-open/tasks/stamps/description
 - name: Baker
   number: 10
   links:
+  - https://cms.ioi-jp.org/joi2026-sp4-open/tasks/baker/description
 - name: Festivals in JOI Kingdom 3
   number: 11
   links:
+  - https://cms.ioi-jp.org/joi2026-sp4-open/tasks/festival/description
 - name: Voltage 2
   number: 12
   links:
+  - https://cms.ioi-jp.org/joi2026-sp4-open/tasks/voltage/description
