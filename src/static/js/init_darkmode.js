@@ -597,6 +597,50 @@ body.dark-mode .md-line pre {
 }
 `;
   document.head.appendChild(styleVc);
+  const styleProblem = document.createElement('style');
+  styleProblem.textContent = `
+.dark-mode .problem-loading-text {
+  color: #aaa;
+}
+.dark-mode .problem-page-header {
+  border-bottom-color: #444;
+}
+.dark-mode .problem-page-name {
+  color: #ffffff;
+}
+.dark-mode .problem-page-meta {
+  color: #777;
+}
+.dark-mode .problem-links-heading {
+  color: #ffffff;
+  border-bottom-color: #444;
+}
+.dark-mode .problem-links-list li {
+  background: #2a2a2a;
+  border-color: #444;
+}
+.dark-mode .problem-links-list li:hover {
+  background: #333;
+}
+.dark-mode .problem-link-name {
+  color: #e0e0e0;
+}
+.dark-mode .problem-link-url {
+  color: #4ea1f3;
+}
+.dark-mode .problem-links-empty {
+  background: #2a2a2a;
+  border-color: #444;
+  color: #aaa;
+}
+.dark-mode .problem-not-found {
+  color: #aaa;
+}
+.dark-mode .problem-not-found h2 {
+  color: #ffffff;
+}
+`;
+  document.head.appendChild(styleProblem);
 }
 let theme = localStorage.getItem('theme');
 if (theme == null || theme == 'light-mode') {

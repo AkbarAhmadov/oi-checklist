@@ -55,7 +55,7 @@ export async function problems(app: FastifyInstance) {
     function pickLink(links: ProblemLink[]): string {
       let pref = user.settings.platformPref as string[] ?? ['oj.uz', 'qoj.ac'];
       let chosen = pref.find(platform => links.some(link => link.platform == platform));
-      return links.find(link => link.platform == chosen)?.url ?? links[0].url ?? null;
+      return links.find(link => link.platform == chosen)?.url ?? links[0]?.url ?? null;
     }
     const result: Record<string, Record<number, any[]>> = {};
     for (const i of problems) {

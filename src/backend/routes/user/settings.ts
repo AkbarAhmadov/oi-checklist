@@ -89,6 +89,8 @@ export async function settings(app: FastifyInstance) {
       if (!user?.settings?.checklistPublic) {
         throw createError.Forbidden('User missing or checklist private');
       }
+      let settings = user.settings;
+      settings.platformUsernames = null;
       return settings;
     }
     throw createError.BadRequest('Username unspecified');

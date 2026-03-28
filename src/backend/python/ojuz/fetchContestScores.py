@@ -57,23 +57,29 @@ def main():
 
       for row in rows:
         try:
+          sub_a = row.find('a', href=re.compile(r'/submission/\d+'))
+          if sub_a:
+            submission_id = sub_a['href'].split('/')[-1]
+            last_submission_id = submission_id
+          else:
+            submission_id = None
+
           tspan = row.find('span', {'data-timestamp-iso': True})
           if not tspan:
             continue
+
           ts_str = tspan['data-timestamp-iso']
           ts = datetime.fromisoformat(ts_str.replace('Z', '+00:00'))
 
           if ts < start_dt:
             submissions_url = None
             break
+
           if ts > end_dt:
             continue
 
-          sub_a = row.find('a', href=re.compile(r'/submission/\d+'))
-          if not sub_a:
+          if not submission_id:
             continue
-          submission_id = sub_a['href'].split('/')[-1]
-          last_submission_id = submission_id
 
           prob_a = row.find('a', href=re.compile(r'/problem/view/'))
           if not prob_a:

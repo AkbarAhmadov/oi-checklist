@@ -2006,3 +2006,123 @@ body,
     max-width: 100%;
   }
 }
+
+/* Problem page */
+.problem-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 3rem;
+}
+
+.problem-loading-text {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+}
+
+.problem-page-header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.problem-page-name {
+    font-size: 2rem;
+    margin: 0 0 1rem 0;
+    color: #333;
+}
+
+.problem-page-meta {
+    font-size: 1rem;
+    color: #888;
+    letter-spacing: 0.01em;
+}
+
+.problem-links-heading {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 0 0 1rem 0;
+    color: #333;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.problem-links-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.problem-links-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    transition: background-color 0.2s;
+}
+
+.problem-links-list li:hover {
+    background: #f0f0f0;
+}
+
+.problem-links-list .platform-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.problem-link-name {
+    font-weight: 500;
+    color: #333;
+    min-width: 110px;
+}
+
+.problem-link-url {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+.problem-link-url:hover {
+    text-decoration: underline;
+}
+
+.problem-links-empty {
+    color: #888;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+}
+
+.problem-not-found {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.problem-not-found h2 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .problem-page {
+        padding: 1rem;
+    }
+
+    .problem-page-name {
+        font-size: 1.5rem;
+    }
+
+    .problem-link-name {
+        min-width: 80px;
+    }
+}
