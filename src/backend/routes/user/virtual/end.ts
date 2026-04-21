@@ -118,7 +118,7 @@ export async function end(app: FastifyInstance) {
         }
       }
       const idx = contestProblems.find(i => i.id == id).problemIndex;
-      perProblemScores[idx] = merged.reduce((a, b) => a + b);
+      perProblemScores[idx] = merged.reduce((a, b) => a + b, 0);
     }
 
     const score = perProblemScores.reduce((a, b) => a + b);

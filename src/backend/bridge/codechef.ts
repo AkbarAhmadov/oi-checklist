@@ -28,7 +28,6 @@ export const codechef = {
         { stdio: ['pipe', 'pipe', 'pipe'] }
       );
       proc.stdin.write(JSON.stringify({ cookie, username, problems }));
-      console.log(JSON.stringify({ cookie, username, problems }));
       proc.stdin.end();
       let out = '';
       proc.stdout.on('data', d => out += d.toString());
@@ -61,7 +60,6 @@ export const codechef = {
       );
       proc.stdin.write(JSON.stringify({ username, contest }));
       proc.stdin.end();
-      console.log(JSON.stringify({ username, contest }));
       let out = '';
       proc.stdout.on('data', d => out += d.toString());
       proc.on('close', () => {
