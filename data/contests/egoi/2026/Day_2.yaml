@@ -16,3 +16,7 @@ problems:
 - source: egoi
   year: 2026
   number: 8
+medalCutoffs:
+  gold: 290.0
+  silver: 266.0
+  bronze: 204.0
