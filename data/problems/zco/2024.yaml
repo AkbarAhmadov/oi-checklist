@@ -1,8 +1,0 @@
-- name: Vegetables
-  number: 1
-  links:
-  - https://codeforces.com/gym/106223/problem/A
-- name: Fruits
-  number: 2
-  links:
-  - https://codeforces.com/gym/106223/problem/B
