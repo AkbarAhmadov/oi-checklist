@@ -1,0 +1,19 @@
+name: CEOI 2022
+location: Magdeburg, Germany
+duration: 300
+website: https://ceoi2022.de/
+link: https://oj.uz/problems/source/ceoi2022day2
+problems:
+- source: ceoi
+  year: 2022
+  number: 4
+- source: ceoi
+  year: 2022
+  number: 5
+- source: ceoi
+  year: 2022
+  number: 6
+medalCutoffs:
+  gold: 200.0
+  silver: 130.0
+  bronze: 85.0

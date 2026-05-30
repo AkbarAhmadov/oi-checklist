@@ -1,0 +1,23 @@
+
+name: IATIsr 2022
+location: Shumen, Bulgaria
+duration: 240
+website: https://iati-shu.org/
+link: https://kilonova.ro/problem_lists/89/progress
+problems:
+- source: iatisr
+  year: 2022
+  number: 1
+  extra: Day 1
+- source: iatisr
+  year: 2022
+  number: 2
+  extra: Day 1
+- source: iatisr
+  year: 2022
+  number: 3
+  extra: Day 1
+# medalCutoffs:
+#   gold: 236.0
+#   silver: 222.0
+#   bronze: 200.0

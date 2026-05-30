@@ -1,0 +1,19 @@
+name: APIO 2026
+location: Uzbekistan
+duration: 300
+website: https://apio2025.uz/
+link: https://oj.uz/problems/source/apio2026
+problems:
+- source: apio
+  year: 2026
+  number: 1
+- source: apio
+  year: 2026
+  number: 2
+- source: apio
+  year: 2026
+  number: 3
+medalCutoffs:
+  gold: 224.1
+  silver: 163.1
+  bronze: 108

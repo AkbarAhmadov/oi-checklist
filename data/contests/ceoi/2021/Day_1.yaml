@@ -1,0 +1,19 @@
+name: CEOI 2021
+location: Magdeburg, Germany
+duration: 300
+website: https://ceoi2023.de/
+link: https://oj.uz/problems/source/ceoi2021day1
+problems:
+- source: ceoi
+  year: 2021
+  number: 1
+- source: ceoi
+  year: 2021
+  number: 2
+- source: ceoi
+  year: 2021
+  number: 3
+medalCutoffs:
+  gold: 205.0
+  silver: 130.0
+  bronze: 100.0

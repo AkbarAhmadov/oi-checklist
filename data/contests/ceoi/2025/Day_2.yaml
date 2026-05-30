@@ -1,0 +1,19 @@
+name: CEOI 2025
+location: Brno, Czechia
+duration: 300
+website: https://ceoi2024.fi.muni.cz/
+link: https://oj.uz/problems/source/ceoi2025day2
+problems:
+- source: ceoi
+  year: 2025
+  number: 4
+- source: ceoi
+  year: 2025
+  number: 5
+- source: ceoi
+  year: 2025
+  number: 6
+medalCutoffs:
+  gold: 265.0
+  silver: 191.0
+  bronze: 127.0

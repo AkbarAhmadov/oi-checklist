@@ -1,0 +1,16 @@
+name: JOIOC 2022
+location: Yoyogi, Tokyo
+duration: 300
+website: https://contests.ioi-jp.org/open-2022/
+link: https://qoj.ac/contest/959
+problems:
+- source: joioc
+  year: 2022
+  number: 1
+- source: joioc
+  year: 2022
+  number: 2
+- source: joioc
+  year: 2022
+  number: 3
+
