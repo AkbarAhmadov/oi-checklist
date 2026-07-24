@@ -1,0 +1,12 @@
+- name: Neq Array
+  number: 1
+  links:
+  - https://codeforces.com/gym/105706/problem/A
+- name: Error of 2
+  number: 2
+  links:
+  - https://codeforces.com/gym/105706/problem/B
+- name: Virtual Tree Subsets
+  number: 3
+  links:
+  - https://codeforces.com/gym/105706/problem/C

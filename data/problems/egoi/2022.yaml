@@ -1,0 +1,40 @@
+- name: SubsetMex
+  number: 1
+  links:
+  - https://codeforces.com/gym/104229/problem/A
+  - https://qoj.ac/problem/5178
+- name: Lego Wall
+  number: 2
+  links:
+  - https://codeforces.com/gym/104229/problem/B
+  - https://qoj.ac/problem/5179
+- name: Social Engineering
+  number: 3
+  links:
+  - https://codeforces.com/gym/104229/problem/C
+  - https://qoj.ac/problem/5180
+- name: Tourists
+  number: 4
+  links:
+  - https://codeforces.com/gym/104229/problem/D
+  - https://qoj.ac/problem/5181
+- name: Data Centers
+  number: 5
+  links:
+  - https://codeforces.com/gym/104230/problem/A
+  - https://qoj.ac/problem/5182
+- name: Superpiece
+  number: 6
+  links:
+  - https://codeforces.com/gym/104230/problem/B
+  - https://qoj.ac/problem/5183
+- name: Toy Design
+  number: 7
+  links:
+  - https://codeforces.com/gym/104230/problem/C
+  - https://qoj.ac/problem/5184
+- name: Chika Wants to Cheat
+  number: 8
+  links:
+  - https://codeforces.com/gym/104230/problem/D
+  - https://qoj.ac/problem/5185

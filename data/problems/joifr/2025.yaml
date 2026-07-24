@@ -1,0 +1,25 @@
+- name: Grid Coloring
+  number: 1
+  links:
+  - https://atcoder.jp/contests/joi2025ho/tasks/joi2025ho_a
+  - https://qoj.ac/problem/10049
+- name: Bitaro the Brave 2
+  number: 2
+  links:
+  - https://atcoder.jp/contests/joi2025ho/tasks/joi2025ho_b
+  - https://qoj.ac/problem/10050
+- name: Mi Teleférico
+  number: 3
+  links:
+  - https://atcoder.jp/contests/joi2025ho/tasks/joi2025ho_c
+  - https://qoj.ac/problem/10051
+- name: Just Long Neckties 2
+  number: 4
+  links:
+  - https://atcoder.jp/contests/joi2025ho/tasks/joi2025ho_d
+  - https://qoj.ac/problem/10052
+- name: Post Office
+  number: 5
+  links:
+  - https://atcoder.jp/contests/joi2025ho/tasks/joi2025ho_e
+  - https://qoj.ac/problem/10053

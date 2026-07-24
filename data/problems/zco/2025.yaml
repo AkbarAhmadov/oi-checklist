@@ -1,0 +1,8 @@
+- name: River
+  number: 1
+  links:
+  - https://codeforces.com/gym/106222/problem/A
+- name: Secret
+  number: 2
+  links:
+  - https://codeforces.com/gym/106222/problem/B

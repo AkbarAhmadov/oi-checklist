@@ -1,0 +1,15 @@
+- name: Mars
+  number: 1
+  links:
+  - https://oj.uz/problem/view/APIO22_mars
+  - https://qoj.ac/problem/4250
+- name: Game
+  number: 2
+  links:
+  - https://oj.uz/problem/view/APIO22_game
+  - https://qoj.ac/problem/4251
+- name: Permutation
+  number: 3
+  links:
+  - https://oj.uz/problem/view/APIO22_perm
+  - https://qoj.ac/problem/4252

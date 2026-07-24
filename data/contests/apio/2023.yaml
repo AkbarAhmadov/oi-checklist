@@ -1,0 +1,19 @@
+name: APIO 2023
+location: China
+duration: 300
+website: https://apio2023.org/
+link: https://oj.uz/problems/source/apio2023
+problems:
+- source: apio
+  year: 2023
+  number: 1
+- source: apio
+  year: 2023
+  number: 2
+- source: apio
+  year: 2023
+  number: 3
+medalCutoffs:
+  gold: 236
+  silver: 191
+  bronze: 145

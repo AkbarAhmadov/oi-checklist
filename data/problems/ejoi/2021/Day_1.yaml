@@ -1,0 +1,14 @@
+- name: AddK
+  number: 1
+  links:
+  - https://oj.uz/problem/view/eJOI21_addk
+  - https://qoj.ac/contest/1968/problem/8096
+- name: KPart
+  number: 2
+  links:
+  - https://oj.uz/problem/view/eJOI21_kpart
+  - https://qoj.ac/contest/1968/problem/8097
+- name: XCopy
+  number: 3
+  links:
+  - https://qoj.ac/contest/1968/problem/8098
