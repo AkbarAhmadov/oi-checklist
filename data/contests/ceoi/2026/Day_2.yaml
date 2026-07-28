@@ -1,0 +1,15 @@
+name: CEOI 2026
+location: Ljubljana, Slovenia
+duration: 300
+website: https://ceoi2026.acm.si/
+link: https://qoj.ac/contest/3943
+problems:
+- source: ceoi
+  year: 2026
+  number: 4
+- source: ceoi
+  year: 2026
+  number: 5
+- source: ceoi
+  year: 2026
+  number: 6
