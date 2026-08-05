@@ -1,0 +1,18 @@
+name: EJOI 2026
+location: Kaunas, Lithuania
+duration: 240
+website: https://www.ejoi2026.lmio.lt
+link: https://eolymp.com/az/contests/ejoi2026-2
+problems:
+- source: ejoi
+  year: 2026
+  number: 1
+  extra: Day 2
+- source: ejoi
+  year: 2026
+  number: 2
+  extra: Day 2
+- source: ejoi
+  year: 2026
+  number: 3
+  extra: Day 2
