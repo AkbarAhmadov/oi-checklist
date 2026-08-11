@@ -1,0 +1,12 @@
+- name: Ball Machine
+  number: 1
+  links:
+  - https://qoj.ac/contest/3952/problem/19101
+- name: Monuments
+  number: 2
+  links:
+  - https://qoj.ac/contest/3952/problem/19102
+- name: Tiling Game
+  number: 3
+  links:
+  - https://qoj.ac/contest/3952/problem/19103
